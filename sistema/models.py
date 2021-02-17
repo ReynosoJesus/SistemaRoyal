@@ -18,7 +18,7 @@ class Alumno(models.Model):
     como_se_entero = models.CharField(max_length=200)
     anotaciones = models.CharField(max_length=500)
     #contrasena = models.CharField(max_length=40,default='12345')
-    primerinicio = models.BooleanField(default=True)
+    #primerinicio = models.BooleanField(default=True)
     activo = models.BooleanField(default=True)
     usuarioreg = models.CharField(max_length=200)
     usuarioultmod = models.CharField(max_length=200)
