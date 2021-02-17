@@ -1,0 +1,35 @@
+<div class="col-md-4">
+    <input type="text" readonly class="form-control-plaintext" id='Rnombre' name="Rnombre" style="text-align: center;"
+        value="{{Alumno_f.nombre}}" required>
+</div>
+<div class="col-md-4">
+    <input type="text" readonly class="form-control-plaintext" id='Rapellido' name="Rapellido" style="text-align: center;"
+        value="{{Alumno_f.apellido}}" required>
+</div>
+<div class="col-md-4">
+    <select class="selectpicker" data-width="auto" data-live-search="true" name="Rcurso" title="Seleccione grupo"
+        style="text-align: center;" id="Rcurso" required>
+        {% for rel in Rel%}
+        {% for grupo in Grupos%}
+        {% if grupo.activo %}
+        {% ifequal grupo.id rel.id_grupo %}
+        {% for curso in Cursos %}
+        {% ifequal grupo.id_curso curso.id %}
+        <option value={{curso.nombre}}-{{curso.nivel}}>{{grupo.nombre}} - {{curso.nombre}} -
+            nivel {{curso.nivel}} - ({{grupo.hora_inicio}}-{{grupo.hora_fin}})</option>
+        {% endifequal %}
+        {% endfor %}
+        {% endifequal %}
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+    </select>
+</div>
+<script>
+    jQuery(document).ready(function ($) {
+        $('.selectpicker').selectpicker({
+            style: 'btn-info',
+            size: 200
+        });
+    });
+</script>

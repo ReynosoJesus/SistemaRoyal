@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 150%;">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="d-flex card-header pb-0">
+                        <div class="mr-auto p-2">
+                            <h5><i class="fas fa-clipboard-list"></i>&nbsp;Ventas</h5>
+                        </div>                        
+                      </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="overflow-y: scroll; height: 300px;">
+                            <input type="text" id="filtroMovimientos" class="form-control" placeholder="Buscar movimiento">
+                            <table class="table table-striped table-hover TablaVentas">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No. Venta</th>
+                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Total</th>
+                                        <th scope="col">Monto Pagado</th>
+                                        <th scope="col">Fecha registro</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TMovimientos">
+                                    {% for alumno in alumnos %}
+                                        {% for venta in venta %}
+                                            <tr>
+                                                <td>{{venta.id}}</td>
+                                                {% if venta.id_cliente == alumno.id %}
+                                                    <td>{{alumno.nombre}} {{alumnos.apellido}}</td>
+                                                {% else %}
+                                                    <td>Público general</td>
+                                                {% endif %}
+                                                <td>$ {{venta.total}}</td>
+                                                <td>$ {{venta.cantPagada}}</td>
+                                                <td>{{venta.fechareg}}</td>
+                                            </tr>
+                                            {% empty %}
+                                                <tr>
+                                                    <div class="alert alert-danger text-center" role="alert">
+                                                        No existe movimiento alguno
+                                                    </div>
+                                                </tr>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#filtroMovimientos").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#TMovimientos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

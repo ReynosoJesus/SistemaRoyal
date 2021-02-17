@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Bienvenido a Royal Language</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+</head>
+
+<body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://kit.fontawesome.com/ffe3dd7d8e.js" crossorigin="anonymous"></script>
+    <script src="/static/js/modalopener.js?newversion"></script>
+    <script>
+        if (window.history.replaceState) { // verificamos disponibilidad -> evita que se reenvie el formulario al recargar la pag.
+            window.history.replaceState(null, null, window.location.href);
+        }
+    </script>
+    <div>
+        <div class="row " style="height: 100vh;">
+            <div class="col-md-4"></div>
+            <div class="col-md-4 h-100  d-flex justify-content-center bg-secondary">
+                <div class="align-self-center">
+                    <div class="card " style="width: 20rem; height: 100%; color: dimgray;">
+                        <div class="row justify-content-center">
+                            <img src="{% static 'img/logo.png' %}"
+                                style="height: 160px; width: 150px; padding-top: 5%;">
+                        </div>
+                        <div class="card-body">
+                            <form method="POST" autocomplete="off">
+                                {% csrf_token %}
+                                <h5 class="card-title" style="text-align: center; padding-top: 5%; font-size: 30px;">
+                                    Royal Language</h5>
+                                <p class="card-text" style="padding-top: 5%;">Rellene los campos para iniciar sesión.
+                                </p>
+                                {% for message in messages %}
+                                <p id="messages">{{message}}</p>
+                                {% endfor %}
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label for="exampleInputUser1"><i class="fas fa-user"
+                                                    style="padding-left: 100%; padding-top: 70%;"></i></label>
+                                        </div>
+                                        <div class="col md-10">
+                                            <input type="text" class="form-control" name="user" required
+                                                placeholder="Usuario">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <label for="exampleInputPassword1"><i class="fas fa-key"
+                                                    style="padding-left: 100%; padding-top: 70%;"></i></label>
+                                        </div>
+                                        <div class="col-md-10">
+                                            <input type="password" class="form-control" name="password"
+                                                placeholder="Contraseña" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top: 8%;">
+                                    <div class="col">
+                                        <button type="reset" class="btn btn-block btn-danger">Cancelar</button>
+                                    </div>
+                                    <div class="col">
+                                        <button type="submit" name="inicio"
+                                            class="btn btn-block btn-success">Registrarse</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+    </div>
+</body>
+
+</html>

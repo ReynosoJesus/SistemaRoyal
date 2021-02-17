@@ -1,0 +1,35 @@
+<div>
+    <div class="col">
+        <select class="form-control" id="Rcurso" name="Rcurso" onchange="precioCurso();">
+            <option value="0" disabled selected>Seleccione curso a pagar</option>            
+            {% for rel in Rel%}
+            {% for grupo in Grupos%}
+            {% if grupo.activo %}
+            {% ifequal grupo.id rel.id_grupo %}
+            {% for curso in Cursos %}
+            {% ifequal grupo.id_curso curso.id %}
+            <option value={{curso.costo}}>{{grupo.nombre}} - {{curso.nombre}} -
+                nivel {{curso.nivel}} - ({{grupo.hora_inicio}}-{{grupo.hora_fin}})</option>
+            {% endifequal %}
+            {% endfor %}
+            {% endifequal %}
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<br/>
+<div>
+    <div class="col">
+        <select class="form-control" id="Radeudo" name="Radeudo" onchange="cantidadAdeudo()">
+            <option value="0" disabled selected>Seleccione abono a pagar</option>
+            {% for adeudo in Adeudos %}
+            {% if adeudo.activo%}
+            <option value={{adeudo.cantidad_adeudo}}-{{adeudo.id}}> {% if adeudo.tipo_adeudo is 1 %} adeudo de (re)inscripcion por: {{adeudo.cantidad_adeudo}}, fecha de adeudo {{adeudo.fechareg}}{% else%} adeudo de tienda por: {{adeudo.cantidad_adeudo}}, fecha de adeudo {{adeudo.fechareg}}{% endif %}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+</div>
+<br/>

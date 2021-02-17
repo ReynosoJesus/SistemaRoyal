@@ -1,0 +1,271 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 150%;">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="d-flex card-header pb-0">
+                        {% if Caja.activa%}
+                        <div class="mr-auto p-2">
+                            <h5><i class="fas fa-cash-register"></i>&nbsp;Caja</h5>
+                        </div>
+                        <div class="p-2">
+                            <div class="col" style="text-align: center;">
+                                <button class="btn btn-outline-primary" type="button" data-toggle="modal"
+                                    data-target="#ModalAgregar">Agregar</button>
+                            </div>
+                        </div>
+                        <div class="p-2">
+                            <div class="col" style="text-align: center;">
+                                <button class="btn btn-outline-primary" type="button" data-toggle="modal"
+                                    data-target="#ModalRetirar">Retirar</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div>
+                            <div class="form-row">
+                                <div class="col" style="text-align: right; margin-top: 8px;">
+                                    <h5>Monto actual en caja:</h5>
+                                </div>
+                                <div class="col">
+                                    <input id="cantidadCaja" name="cantidadCaja" type="number"
+                                        style="text-align: justify; font-family: Verdana; font-size: 20px;" readonly
+                                        class="form-control-plaintext" value="{{Caja.cantidad}}">
+                                </div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+                            Corte de caja realizado, no se podra hacer mas movimientos de pagos o ventas, esperar hasta
+                            mañana a nueva
+                            apertura de caja</h5>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col">
+                <div class="card border-dark">
+                    <div class="d-flex card-header pb-0">
+                        <div class="mr-auto p-2">
+                            <h5><i class="fas fa-clipboard-list"></i>&nbsp;Movimientos</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive" style="overflow-y: scroll; height: 300px;">
+                            <input type="text" id="filtroMovimientos" class="form-control"
+                                placeholder="Buscar movimiento">
+                            <table class="table table-striped table-hover TablaVentas">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No. Movimiento</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col">Monto</th>
+                                        <th scope="col">Motivo</th>
+                                        <th scope="col">Fecha registro</th>
+                                        <th style="display: none;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TMovimientos">
+                                    {% for historial in historial %}
+                                    <tr>
+                                        <td>{{historial.idMovimiento}}</td>
+                                        <td>{{historial.tipo}}</td>
+                                        <td>$ {{historial.monto}}</td>
+                                        <td>{{historial.motivo}}</td>
+                                        <td>{{historial.fechareg}}</td>
+                                        <td><input type="hidden" value="{{historial.id_venta}}"></td>
+                                        {% if historial.motivo == 'Venta' %}
+                                            <td><a class="btn btn-outline-primary modal-detalleventa" data-url={{historial.id_venta}}>Detalles</a></td>
+                                        {% else %}
+                                            <td>&nbsp;</td>
+                                        {% endif %}
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <div class="alert alert-danger text-center" role="alert">
+                                            No existe movimiento alguno
+                                        </div>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            {% if Caja.activa%}
+            <form method="post" id="cerrar_caja">
+                {% csrf_token %}
+                <div class="col" style="text-align: center;">
+                    <button type="submit" form="cerrar_caja" name="cerrar" value="{{Caja.id}}"
+                        class="btn btn-outline-danger">Cerrar Caja</button>
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+    
+
+    <div class="modal fade " id="ModalAgregar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="mr-auto p-2">
+                        <h5><i class="fas fa-money-bill-wave"></i>&nbsp;Agregar a caja</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="registrar_dinero">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col">
+                                <h5>Cantidad a ingresar</h5>
+                            </div>
+                            <div class="col">
+                                <h5>Motivo de ingreso</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">$</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="RegistroCantidad" name="RegistroCantidad"
+                                        min="1" max="10000" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="RegistroMotivo" id="RegistroMotivo"
+                                    placeholder="Ingrese motivo de retiro" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="d-flex pb-0">
+                            <div class="mr-auto p-2">
+                            </div>
+                            <div class="p-2">
+                                <button type="button" class="btn btn-block btn-outline-danger"
+                                    data-dismiss="modal">Cancelar</button>
+                            </div>
+                            <div class="p-2">
+                                <form method="POST" id="ingresar"></form>
+                                <button type="submit" form="registrar_dinero" name="ingresar"
+                                    class="btn btn-block btn-outline-primary"
+                                    onclick="validacionRetiro()">Ingresar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade " id="ModalRetirar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="mr-auto p-2">
+                        <h5><i class="fas fa-money-bill-wave"></i>&nbsp;Retirar</h5>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form method="post" id="registrar_retiro">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col">
+                                <h5>Cantidad a retirar</h5>
+                            </div>
+                            <div class="col">
+                                <h5>Motivo de retiro</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">$</div>
+                                    </div>
+                                    <input type="number" class="form-control" id="RetiroCantidad" name="RetiroCantidad"
+                                        min="1" max="10000" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control" name="RetiroMotivo" id="RetiroMotivo"
+                                    placeholder="Ingrese motivo de retiro" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="form-group">
+                        <div class="d-flex pb-0">
+                            <div class="mr-auto p-2">
+                            </div>
+                            <div class="p-2">
+                                <button type="button" class="btn btn-block btn-outline-danger"
+                                    data-dismiss="modal">Cancelar</button>
+                            </div>
+                            <div class="p-2">
+                                <form method="POST" id="retirar"></form>
+                                <button type="submit" form="registrar_retiro" name="retirar"
+                                    class="btn btn-block btn-outline-primary"
+                                    onclick="validacionRetiro()">Retirar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-div">
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#filtroMovimientos").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#TMovimientos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    function validacionRetiro() {
+        var caja = document.getElementById('cantidadCaja').value
+        var retiro = document.getElementById('RetiroCantidad').value
+        if (retiro > caja) {
+            alert('El valor a retirar no puede ser mayor a la cantidad existente en caja')
+            event.preventDefault();
+        }
+    }
+
+    var modalDiv = $("#modal-div");
+    $(".modal-detalleventa").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalDetalleVenta").modal();
+            }
+        });
+    });
+</script>
+{% endblock %}

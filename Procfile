@@ -1,0 +1,1 @@
+web: gunicorn sistemaGestionRoyal.wsgi --log-file -

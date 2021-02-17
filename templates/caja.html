@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 150%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Apertura de caja</h5>
+        <div class="form-group" style="border: black;">
+            <form method="post" id="registrar_caja">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col"></div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Monto inicial</h5>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col"></div>
+                    <div class="col" style="align-items: center; justify-items: center;">
+                        <input type="number" min="1" max="5000" maxlength="4" class="form-control" name="Rmonto"
+                            placeholder="Ingrese monto de apertura" required>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <br />
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col"></div>
+                    <div class="col" style="text-align: center;">
+                        <button type="submit" form="registrar_caja" name="registrar" class="btn btn-primary">Registrar
+                            monto de apertura</button>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </form>
+            <br />
+            <hr />
+            <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+                si no se realiza una apertura de caja, no podra registrar pagos o ventas en el futuro</h5>
+            <hr />
+        </div>
+    </div>
+</div>
+{% endblock %}

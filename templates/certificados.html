@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 95%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Certificados</h5>
+        <div class="form-row">
+            <div class="d-flex">
+                <div class="p-2 pt-2">
+                    <h4>Realizar certificado para a: </h4>
+                </div>
+                <div class="p-2">
+                    <select class="selectpicker" data-width="auto" data-live-search="true"
+                        title="Seleccione cliente a registrar la venta" id="alumnopicker" onchange="info();" required>
+                        {% for Alumno in Alumnos %}
+                        {% if Alumno.activo is True %}
+                        <option value="{{Alumno.id}}">{{Alumno.nombre}} {{Alumno.apellido}}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <form method="post" id="certificar" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row" style="margin-top: 10px;">
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Nombre</h5>
+                </div>
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Apellidos</h5>
+                </div>
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Curso</h5>
+                </div>
+            </div>
+            <div class="d-flex flex-row" id="info">
+                <div class="col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id='Rnombre' name="Rnombre" required>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" readonly class="form-control-plaintext" id='Rapellido' required>
+                </div>
+                <div class="col-md-4">
+                    <select class="selectpicker" data-width="auto" data-live-search="true" id="Rcurso"
+                    name="Rcurso" title="Seleccione grupo">
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" style="margin-top: 10px;">
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Horas totales</h5>
+                </div>
+                <div class="col-md-4" style="text-align: center;">
+                    <h5>Foto de bandera para certificado</h5>
+                </div>
+            </div>
+            <div class="row" id="info">
+                <div class="col-md-4" style="text-align: center;">
+                    <input type="number" max="100" min="1" name="Rhoras" required>
+                </div>
+                <div class="col-md-4" style="text-align: center;">
+                    <input type="file" name="Rbandera" required>
+                </div>
+            </div>
+        </form>
+        <br/>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col"><button type="submit" form="certificar" name="certificar"
+                class="btn btn-primary">Certificar</button></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function info() {
+        var id_alumno = $('#alumnopicker').val();
+        $.ajax({
+            url: "/certificados/" + id_alumno,
+            type: "get",
+            success: function (data) {
+                $('#info').html(data.rendered_table);
+            }
+        });
+    };
+</script>
+{% endblock %}

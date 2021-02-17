@@ -1,0 +1,96 @@
+{% load static %}
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+    <style type="text/css">
+        @page {
+            size: letter a4 landscape;
+            background-image: url('../sistema/static/img/fondo.jpeg');
+            height: 100%;
+            width: 100%;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        p {
+            margin: 0;
+        }
+
+        .nombre {
+            text-align: right;
+            font-size: 40px;
+            margin-top: 360px;
+            margin-left: 100px;
+            padding-right: 10px;
+            font-family: verdana;
+            color: #ddb246;
+        }
+
+        .principal {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .curso {
+            text-align: center;
+            font-size: 25px;
+            font-family: verdana;
+            margin-top: 60px;
+            margin-left: 280px;
+
+            color: rgb(41, 41, 41);
+        }
+
+        .fecha {
+            font-size: 25px;
+            font-family: verdana;
+            color: rgb(41, 41, 41);
+            text-align: left;
+            padding-left: 350px;
+            padding-bottom: 20px;
+            margin-top: 0px;
+            position: absolute;
+        }
+
+
+        .bandera {
+            zoom: 60%;
+            margin-top: 0px;
+            position: relative;
+            left: 0;
+            top: 0;
+        }
+
+        .parrafo {
+            text-align: center;
+            margin-left: 280px;
+
+            font-size: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="principal">
+        <br />
+        <h1 class="nombre">{{Nombre}} {{Apellido}}</h1>
+        <h1 class="curso">IDIOMA {{Curso}} NIVEL {{Nivel}}</h1>
+        <p class="parrafo">DURACION : {{Horas}} HORAS</p>
+        <div style="position: relative; left: 0; top: 0;">
+            <p class="parrafo">
+                <img class="bandera" src="data:image/png;base64,{{Bandera}}">
+            </p>
+            <h2 class="fecha">{{Fecha}}</h2>
+        </div>
+    </div>
+</body>
+
+</html>

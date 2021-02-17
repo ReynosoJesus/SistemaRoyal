@@ -1,0 +1,94 @@
+<div class="row">
+    <div class="row">
+        <div class="col" style="text-align: left">
+            <h5>Alumnos registrados</h5>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tablainscritos">
+            <thead>
+                <tr>
+                    <th scope="col">Quitar del grupo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Fecha inscripción</th>
+                    <th scope="col">Anotaciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for alumno in Alumnos%}
+                {% if alumno.activo%}
+                {% for rel in Rel%}
+                {% ifequal rel.id_alumno alumno.id%}
+                <tr>
+                    <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                            onclick="quitarAlumno('{{alumno.id}}','{{rel.id_grupo}}');"
+                            data-url={{alumno.id}}>Quitar</a></td>
+                    <td>{{alumno.nombre}}</td>
+                    <td>{{alumno.apellido}}</td>
+                    <td>{{alumno.fecha_inscripcion|stringformat:"s"}}</td>
+                    <td>{{alumno.anotaciones}}</td>
+                </tr>
+                {% endifequal %}
+                {% endfor %}
+                {% endif %}
+                {% empty %}
+                <h2>No existe ningun alumno asignado a grupo</h2>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="row">
+        <div class="col" style="text-align: left">
+            <h5>Agregar alumno</h5>
+        </div>
+        <div class="col-md-5">
+            <input type="text" class="form-control" id="filtroalumno" placeholder="buscar incidencia">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tablanoinscritos">
+            <thead>
+                <tr>
+                    <th scope="col">Agregar al grupo</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Fecha inscripción</th>
+                    <th scope="col">Anotaciones</th>
+                </tr>
+            </thead>
+            <tbody id="tablaAlumnos">
+                {% for alumno in Alumnos_f%}
+                {% if alumno.activo is True%}                        
+                <tr>
+                    <td><a class="btn btn-secondary btn-sm agregar-alumno" style="color: white;"
+                            onclick="agregarAlumno('{{alumno.id}}','{{GrupoF.id}}');"
+                            data-url={{alumno.id}}>Agregar</a></td>
+                    <td>{{alumno.nombre}}</td>
+                    <td>{{alumno.apellido}}</td>
+                    <td>{{alumno.fecha_inscripcion|stringformat:"s"}}</td>
+                    <td>{{alumno.anotaciones}}</td>
+                </tr>
+                {% else%}
+                {% endif%}
+                {% empty %}
+                <h2>No existe ningun alumno disponible en este momento</h2>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#filtroalumno").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablanoinscritos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>

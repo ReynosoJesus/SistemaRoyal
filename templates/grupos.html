@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 95%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Grupos</h5>
+        <div class="form-group" style="border: black;">
+            <div class="row">
+                <div class="col" style="text-align: center;">
+                    <h5>Buscar grupo</h5>
+                </div>
+                <div class="col" style="text-align: center;">
+                    <h5>Agregar grupo</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="filtronombre" placeholder="Buscar incidencia">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true"
+                    title="Puedes buscar por cualquier insidencia en la tabla Ej. Nombre de grupo, Curso, Horario etc...">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                            d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                </button>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="text-align: center;">
+                    <button class="btn btn-secondary btn-sm" type="button" data-toggle="modal"
+                        data-target="#ModalAgregar">+</button>
+
+                    <div class="modal fade " id="ModalAgregar" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo grupo</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" id="registrar_grupo">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <h5>Nombre</h5>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Curso</h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <input type="text" class="form-control" id="Rnombre" name="Rnombre"
+                                                    placeholder="Ingrese nombre del grupo" required>
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-control" id="Rcurso" name="Rcurso" required>
+                                                    <option disabled selected value="">Seleccione curso</option>
+                                                    {% for curso in Cursos %}
+                                                    {% if curso.activo %}
+                                                    <option value={{curso.id}}>{{curso.nombre}} - nivel
+                                                        {{curso.nivel}}</option>
+                                                    {% endif %}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <h5>Aula</h5>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Docente</h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <select class="form-control" id="Raula" name="Raula" required>
+                                                    <option disabled selected value="">Seleccione Aula</option>
+                                                    {% for aula in Aulas %}
+                                                    {% if aula.activa %}
+                                                    <option value={{aula.id}}>{{aula.nombre_aula}}</option>
+                                                    {% endif%}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-control" id="Rdocente" name="Rdocente" required>
+                                                    <option disabled selected value="">Seleccione Docente</option>
+                                                    {% for docente in Docentes %}
+                                                    {% if docente.activo %}
+                                                    <option value={{docente.id}}>{{docente.nombre}}</option>
+                                                    {% endif%}
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" style="margin-top: 10px;">
+                                            <div class="col">
+                                                <h5>Fecha de inicio</h5>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Fecha de fin</h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <input type="date" class="form-control" id="Rfinicio" required
+                                                    name="Rfinicio">
+                                            </div>
+                                            <div class="col">
+                                                <input type="date" class="form-control" id="Rffin" required
+                                                    name="Rffin">
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row" style="margin-top: 10px;">
+                                            <div class="col">
+                                                <h5>Hora de inicio</h5>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Hora de fin</h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <input type="time" class="form-control" id="Rhinicio" required
+                                                    name="Rhinicio">
+                                            </div>
+                                            <div class="col">
+                                                <input type="time" class="form-control" id="Rhfin" required
+                                                    name="Rhfin">
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <h5>Periodo</h5>
+                                            </div>
+                                            <div class="col">
+                                                <h5>Tipo de curso</h5>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col">
+                                                <input type="month" class="form-control" id="Rperiodo" required
+                                                    name="Rperiodo">
+                                            </div>
+                                            <div class="col">
+                                                <select class="form-control" id="Rtipo" name="Rtipo" required>
+                                                    <option disabled selected value="">Seleccione Tipo de curso</option>
+                                                    <option value="Linea">Linea</option>
+                                                    <option value="Presencial">Presencial</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Cancelar</button>
+                                        <button type="submit" form="registrar_grupo" name="registrar"
+                                            class="btn btn-primary">Guardar grupo</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+        <br />
+        <div class="row" style="margin-left: 3px;  margin-top: 10px;">
+            <div class="table-responsive" style="overflow-y: scroll; height: 450px;">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Consultar grupo</th>
+                            <th scope="col">Grupo</th>
+                            <th scope="col">Curso</th>
+                            <th scope="col">Horario</th>
+                            <th scope="col">Mas info.</th>
+                            <th scope="col">Modificar grupo</th>
+                            <th scope="col">Desactivar grupo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablagrupos">
+                        {% for grupo in Grupos %}
+                        {% if grupo.activo%}
+                        <tr>
+                            <td><a class="btn btn-secondary btn-sm modal-consulta" style="color: white;"
+                                    data-url={{grupo.id}}>consultar</a></td>
+                            <td>{{grupo.nombre}}</td>
+                            {% for cursos in Cursos %}
+                            {% ifequal cursos.id grupo.id_curso %}
+                            <td>{{cursos.nombre}} - nivel {{cursos.nivel}}</td>
+                            {% endifequal %}
+                            {% endfor %}
+                            <td>({{grupo.hora_inicio}}-{{grupo.hora_fin}})</td>
+                            <td>consulte el grupo para ver su descripcion completa</td>
+                            <td><a class="btn btn-secondary btn-sm modal-modifica" style="color: white;"
+                                    data-url={{grupo.id}}>modificar</a></td>
+                            <td><a class="btn btn-secondary btn-sm modal-elimina" style="color: white;"
+                                    data-url={{grupo.id}}>desactivar</a></td>
+                        </tr>
+                        {% endif %}
+                        {% empty %}
+                        <h2>No existe ningun grupo, por favor cree uno</h2>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="modal-div">
+        </div>
+    </div>
+</div>
+<script>
+    var modalDiv = $("#modal-div");
+    $(".modal-consulta").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalConsultarGrupos").modal();
+            }
+        });
+    });
+    $(".modal-modifica").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalModificarGrupos").modal();
+            }
+        });
+    });
+    $(".modal-elimina").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalEliminarGrupos").modal();
+            }
+        });
+    });
+    $(document).ready(function () {
+        $("#filtronombre").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablagrupos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

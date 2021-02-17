@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 130%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Aulas</h5>
+        <div class="row">
+            <div class="col" style="text-align: center;">
+                <h5>Buscar aula</h5>
+            </div>
+            <div class="col" style="text-align: center;">
+                <h5>Agregar aula</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="filtronombre" placeholder="Buscar incidencia">
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true"
+                    title="Puedes buscar por cualquier insidencia en la tabla Ej. Nombre de aula, Cantidad sillas,Cantidad mesas etc...">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                            d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2" style="text-align: center;">
+                <button class="btn btn-secondary btn-sm" type="button" data-toggle="modal"
+                    data-target="#ModalAgregar">+</button>
+
+                <div class="modal fade" id="ModalAgregar" tabindex="-1" role="dialog" aria-labelledby="ModalAula"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo grupo</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" id="registrar_aula">
+                                    {% csrf_token %}
+                                    <div class="form-row" style="margin-top: 10px;">
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Nombre aula</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Cantidad sillas</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Cantidad mesas</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <input type="text" class="form-control" name="RnAula"
+                                                placeholder="Ingrese nombre de aula" required>
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="form-control" name="Rnumsillas"
+                                                placeholder="Ingrese cantidad de sillas" required>
+                                        </div>
+                                        <div class="col">
+                                            <input type="number" class="form-control" name="Rnummesas"
+                                                placeholder="Ingrese cantidad de mesas" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" style="margin-top: 10px;">
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Capacidad alumnos</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>ventilacion</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>ventanas</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <input type="number" class="form-control" name="Rnumalumnos"
+                                                placeholder="Ingrese nombre de aula" required>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="Rventilacion">
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="Rventanas">
+                                        </div>
+                                    </div>
+                                    <div class="form-row" style="margin-top: 10px;">
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Pintarron</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Pantalla</h5>
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <h5>Aula silenciada</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="col" style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="Rpintarron">
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="Rpantalla">
+                                        </div>
+                                        <div class="col" style="text-align: center;">
+                                            <input class="form-check-input" type="checkbox" name="Rsilencio">
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <h5>Anotaciones</h5>
+                                        </div>
+                                    </div>
+                                    <div class="form-row" style="align-items: center; justify-items: center;">
+                                        <div class="col">
+                                            <textarea class="form-control" style="resize: none;" name="Ranotaciones"
+                                                rows="5" required></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" form="registrar_aula" name="registrar"
+                                        class="btn btn-primary">Guardar aula</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <div class="row" style="margin-left: 3px;  margin-top: 10px;">
+            <div class="table-responsive" style="overflow-y: scroll; height: 450px;">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Consultar aula</th>
+                            <th scope="col">Nombre aula</th>
+                            <th scope="col">Cantidad sillas</th>
+                            <th scope="col">Cantidad Mesas</th>
+                            <th scope="col">Capacidad</th>
+                            <th scope="col">Mas Info.</th>
+                            <th scope="col">Modificar aula</th>
+                            <th scope="col">Eliminar aula</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaAulas">
+                        {% for aula in Aulas %}
+                        {% if aula.activa %}
+                        <tr>
+                            <td><a class="btn btn-secondary btn-sm modal-consulta" style="color: white;"
+                                    data-url={{aula.id}}>consultar</a></td>
+                            <td>{{aula.nombre_aula}}</th>
+                            <td>{{aula.cantidad_sillas}}</td>
+                            <td>{{aula.cantidad_mesas}}</td>
+                            <td>{{aula.capacidad}}</td>
+                            <td>Consulte el aula para ver su informacion completa</td>
+                            <td><a class="btn btn-secondary btn-sm modal-modifica" style="color: white;"
+                                    data-url={{aula.id}}>modificar</a></td>
+                            <td><a class="btn btn-secondary btn-sm modal-elimina" style="color: white;"
+                                    data-url={{aula.id}}>eliminar</a></td>
+                        </tr>
+                        {% else %}
+                        {% endif %}
+                        {% empty %}
+                        <h2>No existe ninguna aula, por favor cree una</h2>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="modal-div">
+        </div>
+    </div>
+</div>
+<script>
+    var modalDiv = $("#modal-div");
+    $(".modal-consulta").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalConsultarAulas").modal();
+            }
+        });
+    });
+    $(".modal-modifica").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalModificarAulas").modal();
+            }
+        });
+    });
+    $(".modal-elimina").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalEliminarAulas").modal();
+            }
+        });
+    });
+    $(document).ready(function () {
+        $("#filtronombre").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablaAulas tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

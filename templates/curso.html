@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card " style="width: 95%; height: 150%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Cursos</h5>
+            <div class="row">
+                <div class="col" style="text-align: center;">
+                    <h5>Buscar curso</h5>
+                </div>
+                <div class="col" style="text-align: center;">
+                    <h5>Agregar curso</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="text" class="form-control" id="filtronombre" placeholder="Buscar incidencia">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true"
+                        title="Puedes buscar por cualquier insidencia en la tabla Ej. Nombre de curso, Nivel,Costo etc...">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                            class="bi bi-info-circle" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                            <path
+                                d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="text-align: center;">
+                    <button class="btn btn-secondary btn-sm" type="button" data-toggle="modal"
+                        data-target="#ModalAgregar">+</button>
+                    <div class="modal fade" id="ModalAgregar" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Agregar nuevo curso</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" id="registrar_curso">
+                                        {% csrf_token %}
+                                        <div class="form-row">
+                                            <h5>Nombre del curso</h5>
+                                            <input type="text" class="form-control" id="Rnombrecurso"
+                                                name="Rnombrecurso" required>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <h5>Nivel</h5>
+                                            <input type="number" id="Rnivel" name="Rnivel" class="form-control"
+                                                required>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <h5>Costo</h5>
+                                            <input type="number" id="Rcosto" name="Rcosto" class="form-control"
+                                                required>
+                                        </div>
+                                        <br />
+                                        <div class="form-row">
+                                            <h5>Descripcion</h5>
+                                            <textarea class="form-control" style="resize: none;" rows="5" id="Rdescurso"
+                                                name="Rdescurso" required></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" value="registrar" form="registrar_curso" name="registrar"
+                                        class="btn btn-secondary">Guardar curso</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+    
+        <br />
+        <div class="row" style="margin-left: 3px;  margin-top: 10px;">
+            <div class="table-responsive" style="overflow-y: scroll; height: 450px;">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Consultar curso</th>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Nivel</th>
+                            <th scope="col">Costo</th>
+                            <th scope="col">Descripcion</th>
+                            <th scope="col">Modificar curso</th>
+                            <th scope="col">Eliminar curso</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablacursos">
+                        {% for cursos in Curso %}
+                        <tr>
+                            <td><a class="btn btn-secondary btn-sm modal-consulta" style="color: white;"
+                                    data-url={{cursos.id}}>consultar</a></td>
+                            <td>{{cursos.nombre}}</td>
+                            <td>{{cursos.nivel}}</td>
+                            <td>{{cursos.costo}}</td>
+                            <td>consulte el curso para ver su descripcion completa</td>
+                            <td><a class="btn btn-secondary btn-sm modal-modifica" style="color: white;"
+                                    data-url={{cursos.id}}>modificar</a></td>
+                            <td><a class="btn btn-secondary btn-sm modal-elimina" style="color: white;"
+                                    data-url={{cursos.id}}>eliminar</a></td>
+                        </tr>
+                        {% empty %}
+                            <h2>No existe ningun curso, por favor cree uno</h2>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="modal-div">
+        </div>
+    </div>
+</div>
+<script>
+    var modalDiv = $("#modal-div");
+    $(".modal-consulta").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalConsultarCursos").modal();
+            }
+        });
+    });
+    $(".modal-modifica").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalModificarCursos").modal();
+            }
+        });
+    });
+    $(".modal-elimina").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalEliminarCursos").modal();
+            }
+        });
+    });
+    $(document).ready(function () {
+        $("#filtronombre").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablacursos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}

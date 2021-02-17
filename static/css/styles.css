@@ -1,0 +1,7 @@
+.scrollbar{
+    overflow-x: auto;
+}
+
+.tabla-scroll{
+    display: block;
+}

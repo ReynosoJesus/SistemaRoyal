@@ -1,0 +1,3076 @@
+<!-- MODALES DE CURSO-->
+<div class="modal fade " id="ModalConsultarCursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Consultar información de grupo seleccionado
+                </h5>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="form-row">
+                    <h5>Nombre del curso</h5>
+                    <input type="text" style="width:100%" readonly class="form-control-plaintext"
+                        value="{{CursoF.nombre}}" size="50">
+                </div>
+                <div class="form-row">
+                    <h5>Nivel</h5>
+                    <input type="number" readonly class="form-control-plaintext" value="{{CursoF.nivel}}">
+                </div>
+                <div class="form-row">
+                    <h5>Costo</h5>
+                    <input type="number" readonly class="form-control-plaintext" value="{{CursoF.costo}}">
+                </div>
+                <div class="form-row">
+                    <h5>Descripcion</h5>
+                    <textarea class="form-control" readonly style="resize: none;" id="textAreaconsulta"
+                        rows="5">{{CursoF.descripcion}}</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarCursos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar grupo</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_curso">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <h5>Nombre del curso</h5>
+                        <input type="text" class="form-control" id="Mnombrecurso" name="Mnombrecurso"
+                            value="{{CursoF.nombre}}" required>
+                    </div>
+                    <div class="form-row">
+                        <h5>Nivel</h5>
+                        <input type="number" class="form-control" id="Mnivel" name="Mnivel" value="{{CursoF.nivel}}" required>
+                    </div>
+                    <div class="form-row">
+                        <h5>Costo</h5>
+                        <input type="number" class="form-control" id="Mcosto" name="Mcosto" value="{{CursoF.costo}}" required>
+                    </div>
+                    <div class="form-row">
+                        <h5>Descripcion</h5>
+                        <textarea class="form-control" style="resize: none;" id="Mdescurso" name="Mdescurso"
+                            rows="5" required>{{CursoF.descripcion}}</textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{CursoF.id}} form="modificar_curso" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarCursos" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                {% if CursoF.activo %}
+                <p>No puedes eliminar un curso que este en un(os) grupo(s), por favor elimina el grupo o cambia de curso
+                </p>
+                {% else %}
+                <p>Eliminaras el curso <b>"{{CursoF.nombre}} - {{CursoF.nivel}}"</b> con todos sus datos de forma
+                    permanente.</p>
+                <p>¿Deseas continuar?</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer justify-content-center">
+                {% if CursoF.activo %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                {% else %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{CursoF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES DE AULAS-->
+<div class="modal fade " id="ModalConsultarAulas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Consultar información de aula seleccionada
+                </h5>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col" style="text-align: center;">
+                        <h5>Nombre aula</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Cantidad sillas</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Cantidad mesas</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" disabled value="{{AulaF.nombre_aula}}">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" disabled value="{{AulaF.cantidad_sillas}}">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" disabled value="{{AulaF.cantidad_mesas}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col" style="text-align: center;">
+                        <h5>Capacidad alumnos</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>ventilacion</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>ventanas</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="number" class="form-control" disabled value="{{AulaF.capacidad}}">
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if AulaF.ventilacion %}checked{% endif %}>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if AulaF.ventanas %}checked{% endif %}>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col" style="text-align: center;">
+                        <h5>Pintarron</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Pantalla</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Aula silenciada</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if AulaF.pintarron %}checked{% endif %}>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if AulaF.pantalla %}checked{% endif %}>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if AulaF.aula_silenciada %}checked{% endif %}>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Anotaciones</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <textarea class="form-control" readonly style="resize: none;"
+                            rows="5">{{AulaF.anotaciones}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarAulas" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Consultar información de aula seleccionada
+                </h5>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <form method="post" id="modificar_aula">
+                    {% csrf_token %}
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Nombre aula</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Cantidad sillas</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Cantidad mesas</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="MnAula" value="{{AulaF.nombre_aula}}"
+                                placeholder="Ingrese nombre de aula" required>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" name="Mnumsillas" value="{{AulaF.cantidad_sillas}}"
+                                placeholder="Ingrese cantidad de sillas" required>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" name="Mnummesas" value="{{AulaF.cantidad_mesas}}"
+                                placeholder="Ingrese cantidad de mesas">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Capacidad alumnos</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>ventilacion</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>ventanas</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" class="form-control" name="Mnumalumnos" value="{{AulaF.capacidad}}"
+                                placeholder="Ingrese nombre de aula" required>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="Mventilacion"
+                                {% if AulaF.ventilacion %}checked{% endif %}>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="Mventanas"
+                                {% if AulaF.ventanas %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Pintarron</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Pantalla</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Aula silenciada</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="Mpintarron"
+                                {% if AulaF.pintarron %}checked{% endif %}>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="Mpantalla"
+                                {% if AulaF.pantalla %}checked{% endif %}>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="Msilencio"
+                                {% if AulaF.aula_silenciada %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Anotaciones</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea class="form-control" style="resize: none;" name="Manotaciones"
+                                rows="5" required></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{AulaF.id}} form="modificar_aula" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarAulas" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Eliminaras el aula <b>"{{AulaF.nombre_aula}}"</b> junto con todos sus datos de forma permanente.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{AulaF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES DE DOCENTES-->
+<div class="modal fade " id="ModalConsultarDocentes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Información docente</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Apellidos</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.nombre}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.apellido}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Correo electrónico</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de nacimiento</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de inicio</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="email" readonly class="form-control-plaintext" value="{{DocenteF.correo}}">
+                    </div>
+                    <div class="col">
+                        <input type="date" disabled class="form-control" value="{{DocenteF.fecha_nacimiento}}">
+                    </div>
+                    <div class="col">
+                        <input type="date" disabled class="form-control" value="{{DocenteF.fecha_inicio}}">
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center; margin-top: 10px;">
+                    <div class="col">
+                        <h5>Número telefónico</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Dirección</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.telefono}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.direccion}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Ciudad</h5>
+                    </div>
+                    <div class="col">
+                        <h5>C.P.</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.ciudad}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.codigopostal}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Estado</h5>
+                    </div>
+                    <div class="col">
+                        <h5>País</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.estado}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.pais}}">
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="col">
+                        <h5>CURP</h5>
+                    </div>
+                    <div class="col">
+                        <h5>RFC</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.curp}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{DocenteF.rfc}}">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarDocentes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Información docente</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_docente" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Apellidos</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.nombre}}" required name="MnombresD">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.apellido}}" required name="MapellidosD">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Correo electrónico</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de nacimiento</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de inicio</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="email" class="form-control" value="{{DocenteF.correo}}" required name="McorreoD">
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" value="{{DocenteF.fecha_nacimiento}}" required
+                                name="MfechanacD">
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" value="{{DocenteF.fecha_inicio}}" required name="Mfechaini">
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center; margin-top: 10px;">
+                        <div class="col">
+                            <h5>Número telefónico</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Dirección</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="tel" class="form-control" value="{{DocenteF.telefono}}" required maxlength="10" minlength="10" name="MnumerotelD">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.direccion}}" required name="MdireccionD">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Ciudad</h5>
+                        </div>
+                        <div class="col">
+                            <h5>C.P.</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.ciudad}}" required name="MciudadD">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.codigopostal}}" required name="McodpostalD">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Estado</h5>
+                        </div>
+                        <div class="col">
+                            <h5>País</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.estado}}" required name="MestadoD">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.pais}}" required name="MpaisD">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>CURP</h5>
+                        </div>
+                        <div class="col">
+                            <h5>RFC</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.curp}}" required name="McurpD">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" value="{{DocenteF.rfc}}" required name="MrfcD">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{DocenteF.id}} form="modificar_docente" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarDocentes" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                {% if DocenteF.ocupado %}
+                <p>No puedes eliminar un docente que este en un(os) grupo(s), por favor elimina el grupo o cambia de
+                    docente</p>
+                {% else %}
+                <p>Eliminaras el docente <b>"{{DocenteF.nombre}} {{DocenteF.apellido}}"</b> con todos sus datos de forma
+                    permanente.</p>
+                <p>¿Deseas continuar?</p>
+                {% endif %}
+            </div>
+            <div class="modal-footer justify-content-center">
+                {% if DocenteF.ocupado %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                {% else %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{DocenteF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODALES DE PROMOCIONES-->
+<div class="modal fade " id="ModalConsultarPromociones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de la informacion del
+                    alumno seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Nombre promocion</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Porcentaje descuento</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{PromocionF.nombre}}">
+                    </div>
+                    <div class="col">
+                        <input type="number" readonly class="form-control-plaintext" value="{{PromocionF.porcentaje}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Fecha de inicio</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de fin</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="date" disabled class="form-control" value="{{PromocionF.fecha_inicio}}">
+                    </div>
+                    <div class="col">
+                        <input type="date" disabled class="form-control" value="{{PromocionF.fecha_fin}}">
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Descripcion</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <textarea readonly class="form-control-plaintext" style="resize: none;"
+                            rows="5">{{PromocionF.descripcion}}</textarea>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col" style="text-align: center;">
+                        <h5>Promocion activa/desactiva</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col" style="text-align: center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if PromocionF.activa %}checked{% endif %}>
+                    </div>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalModificarPromociones" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Alumno</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_promo">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre promocion</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Porcentaje descuento</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="MnombreP" value="{{PromocionF.nombre}}"
+                                placeholder="Ingrese nombre de la promocion" required>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" name="MporcentajeP" required
+                                value="{{PromocionF.porcentaje}}" placeholder="Ingrese el porcetaje de descuento">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Fecha de inicio</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de fin</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="date" class="form-control" name="MfechainiP" required value="{{PromocionF.fecha_inicio}}">
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="MfechafinP" required value="{{PromocionF.fecha_fin}}">
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Descripcion</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea class="form-control" style="resize: none;" name="MdescripcionP"
+                                placeholder="inserte una descripcion de la promo" required
+                                rows="5">{{PromocionF.descripcion}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col" style="text-align: center;">
+                            <h5>Promocion activa/desactiva</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col" style="text-align: center;">
+                            <input class="form-check-input" type="checkbox" name="MactivarP"
+                                {% if PromocionF.activa %}checked{% endif %}>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{PromocionF.id}} form="modificar_promo" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarPromociones" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Eliminaras la promocion <b>"{{PromocionF.nombre}}"</b> con todos sus datos de forma
+                    permanente.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{PromocionF.id}} name="eliminar"
+                        class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS DE GRUPOS-->
+<script>
+    function quitarAlumno(id_alumno, id_grupo) {
+        $.ajax({
+            url: "/grupos/" + id_alumno + "/" + id_grupo + "/" + 1,
+            type: "get",
+            success: function (data) {
+                alert("Alumno eliminado del grupo");
+                $('#tablas').html(data.rendered_table);
+            }
+        });
+    };
+
+    function agregarAlumno(id_alumno, id_grupo) {
+        $.ajax({
+            url: "/grupos" + "/" + id_alumno + "/" + id_grupo + "/" + 2,
+            type: "get",
+            success: function (data) {
+                alert("Alumno agregado del grupo");
+                $('#tablas').html(data.rendered_table);
+            }
+        });
+    };
+
+    function quitarAula(id_aula, id_grupo) {
+        $.ajax({
+            url: "/gruposAulas/" + id_aula + "/" + id_grupo + "/" + 1,
+            type: "get",
+            success: function (data) {
+                alert("Aula eliminada del grupo");
+                $('#tablasA').html(data.rendered_table);
+            }
+        });
+    };
+
+    function agregarAula(id_aula, id_grupo) {
+        $.ajax({
+            url: "/gruposAulas/" + id_aula + "/" + id_grupo + "/" + 2,
+            type: "get",
+            success: function (data) {
+                alert("Aula asignada al grupo");
+                $('#tablasA').html(data.rendered_table);
+            }
+        });
+    };
+
+    $(document).ready(function () {
+        $("#filtroalumno").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablanoinscritos tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+    $(document).ready(function () {
+        $("#filtroaulas").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablaNoAsignadas tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+</script>
+
+<!-- MODALES DE GRUPOS-->
+<div class="modal fade " id="ModalConsultarGrupos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    Consultar información de grupo seleccionado
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Curso</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control" value="{{GrupoF.nombre}}">
+                    </div>
+                    <div class="col">
+                        <select class="form-control" disabled>
+                            <option selected>{{Curso_f.nombre}} - nivel {{Curso_f.nivel}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Docente</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <select class="form-control" disabled>
+                            <option selected>{{Docente_f.nombre}} {{Docente_f.apellido}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Fecha de inicio</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de fin</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="date" class="form-control" value="{{GrupoF.fecha_inicio}}" disabled>
+                    </div>
+                    <div class="col">
+                        <input type="date" class="form-control" value="{{GrupoF.fecha_fin}}" disabled>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Hora de inicio</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Hora de fin</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="time" class="form-control" value="{{GrupoF.hora_inicio}}" disabled>
+                    </div>
+                    <div class="col">
+                        <input type="time" class="form-control" value="{{GrupoF.hora_fin}}" disabled>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Periodo</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Tipo de curso</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="month" class="form-control" value="{{GrupoF.periodo}}" disabled>
+                    </div>
+                    <div class="col">
+                        <select class="form-control" disabled>
+                            <option>{{GrupoF.tipo_grupo}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <div class="col" style="text-align: center;">
+                        <h5>Grupo activo/inactivo</h5>
+                    </div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Promocion ya ofertada</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col" style="text-align:center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if GrupoF.activo %}checked{% endif %}>
+                    </div>
+                    <div class="col" style="text-align:center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if GrupoF.promo_ofertada %}checked{% endif %}>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-around">
+                    <div class="col"></div>
+                    <div class="col" style="text-align: center;">
+                        <h5>Alumnos con adeudos</h5>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="form-row">
+                    <div class="col"></div>
+                    <div class="col" style="text-align:center;">
+                        <input class="form-check-input" disabled type="checkbox"
+                            {% if GrupoF.alumnos_adeudos %}checked{% endif %}>
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col" style="text-align: left">
+                        <h5>Aulas asignadas</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre aula</th>
+                                <th scope="col">Sillas</th>
+                                <th scope="col">Mesas</th>
+                                <th scope="col">Alumnos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rel in RelA %}
+                            {% for aula in Aulas %}
+                            {% ifequal rel.id_aula aula.id %}
+                            <tr>
+                                <td>{{aula.nombre_aula}}</td>
+                                <td>{{aula.cantidad_sillas}}</td>
+                                <td>{{aula.cantidad_mesas}}</td>
+                                <td>{{aula.capacidad}}</td>
+                            </tr>
+                            {% endifequal %}
+                            {% endfor %}
+                            {% empty %}
+                            <h2>No existe ningun aula asignada a este grupo</h2>
+                            {% endfor %}
+                        </tbody>
+                    </table>                    
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col" style="text-align: left">
+                        <h5>Alumnos registrados</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Apellidos</th>
+                                <th scope="col">Fecha inscripción</th>
+                                <th scope="col">Anotaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rel in Rel%}
+                            {% for alumno in Alumnos%}
+                            {% if alumno.activo%}
+                            {% ifequal rel.id_alumno alumno.id%}
+                            <tr>
+                                <tr>
+                                    <td>{{alumno.nombre}}</td>
+                                    <td>{{alumno.apellido}}</td>
+                                    <td>{{alumno.fecha_inscripcion|stringformat:"s"}}</td>
+                                    <td>{{alumno.anotaciones}}</td>
+                                </tr>
+                            </tr>
+                            {% endifequal %}
+                            {% endif %}
+                            {% endfor %}
+                            {% empty %}
+                            <h2>No existe ningun alumno asignado a este grupo</h2>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <br>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarGrupos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar grupo</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_grupo">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Curso</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" id="Mnombre" name="Mnombre" required value="{{GrupoF.nombre}}" placeholder="Ingrese nombre del grupo">
+                        </div>
+                        <div class="col">
+                            <select class="form-control" id="Mcurso" name="Mcurso" required>
+                                <option disabled value="">Seleccione curso</option>
+                                {% for curso in Cursos %}
+                                {% if curso.activo %}
+                                {% ifequal curso.id GrupoF.id_curso %}
+                                <option value={{curso.id}} selected>
+                                    {{curso.nombre}} - nivel
+                                    {{curso.nivel}}</option>
+                                {% else %}
+                                <option value={{curso.id}}>
+                                    {{curso.nombre}} - nivel
+                                    {{curso.nivel}}</option>
+                                {% endifequal %}
+                                {% endif%}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Docente</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <select class="form-control" id="Mdocente" name="Mdocente" required>
+                                <option disabled value="">Seleccione docente</option>
+                                {% for docentes in Docentes %}
+                                <option value={{docentes.id}} {% ifequal docentes.id GrupoF.id_docente %} selected
+                                    {% endifequal %}>{{docentes.nombre}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Fecha de inicio</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de fin</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="date" class="form-control" name="Mfinicio" required value={{GrupoF.fecha_inicio}}>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="Mffin" required value={{GrupoF.fecha_fin}}>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Hora de inicio</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Hora de fin</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="time" class="form-control" name="Mhinicio" required value={{GrupoF.hora_inicio}}>
+                        </div>
+                        <div class="col">
+                            <input type="time" class="form-control" name="Mhfin" required value={{GrupoF.hora_fin}}>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Periodo</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Tipo de curso</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="month" class="form-control" required name="Mperiodo" value={{GrupoF.periodo}}>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" name="Mtipo" required>
+                                <option disabled>Seleccione Tipo de curso</option>
+                                <option value="Linea" {% ifequal GrupoF.tipo_grupo Linea %} selected {% endifequal %}>
+                                    Linea</option>
+                                <option value="Presencial" {% ifequal GrupoF.tipo_grupo Presencial %} selected
+                                    {% endifequal %}>Presencial</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <div class="col" style="text-align: center;">
+                            <h5>Grupo activo/inactivo</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Promocion ya ofertada</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col" style="text-align:center;">
+                            <input type="checkbox" name="checkbox" disabled {% if GrupoF.activo %}checked{% endif %}>
+                        </div>
+                        <div class="col" style="text-align:center;">
+                            <input class="form-check-input" type="checkbox" name="Mpromocion"
+                                {% if GrupoF.promo_ofertada %}checked{% endif %}>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Alumnos con adeudos</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"></div>
+                        <div class="col" style="text-align:center;">
+                            <input class="form-check-input" type="checkbox" disabled
+                                {% if GrupoF.alumnos_adeudos %}checked{% endif %}>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+                <br/>
+                <hr size="10" style="border:1px solid"/>
+                <!-- TABLAS DE AULAS-->
+                <div class="form-row" style="padding-left: 10px;" id="tablasA">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col" style="text-align: left">
+                                <h5>Aulas asignadas</h5>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tablaAsignadas">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Quitar del grupo</th>
+                                        <th scope="col">Nombre aula</th>
+                                        <th scope="col">Sillas</th>
+                                        <th scope="col">Mesas</th>
+                                        <th scope="col">Capacidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rel in RelA %}
+                                    {% for aula in Aulas %}
+                                    {% ifequal rel.id_aula aula.id %}
+                                    <tr>
+                                        <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                                            onclick="quitarAula('{{aula.id}}','{{GrupoF.pk}}');"
+                                            data-url={{aula.id}}>Quitar</a></td>
+                                        <td>{{aula.nombre_aula}}</td>
+                                        <td>{{aula.cantidad_sillas}}</td>
+                                        <td>{{aula.cantidad_mesas}}</td>
+                                        <td>{{aula.capacidad}}</td>
+                                    </tr>
+                                    {% endifequal %}
+                                    {% endfor %}
+                                    {% empty %}
+                                    <h2>No existe ningun aula asignada a este grupo</h2>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-6" style="text-align: left">
+                                <h5>Aulas disponibles</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="filtroaulas" placeholder="buscar incidencia">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tablaNoAsignadas">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Asignar al grupo</th>
+                                        <th scope="col">Nombre aula</th>
+                                        <th scope="col">Sillas</th>
+                                        <th scope="col">Mesas</th>
+                                        <th scope="col">Capacidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for aula in Aulas_f %}
+                                    {% if aula.activa %}
+                                    <tr>
+                                        <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                                            onclick="agregarAula('{{aula.id}}','{{GrupoF.pk}}');"
+                                            data-url={{aula.id}}>Agregar</a></td>
+                                        <td>{{aula.nombre_aula}}</td>
+                                        <td>{{aula.cantidad_sillas}}</td>
+                                        <td>{{aula.cantidad_mesas}}</td>
+                                        <td>{{aula.capacidad}}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% empty %}
+                                    <h2>No existe ningun aula disponible en este momento</h2>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+                    <br/>
+                    <hr size="5" style="border:1px solid"/>
+                    <br/>
+                <div class="form-row" style="padding-left: 10px;" id="tablas">
+                    <!-- TABLAS DE ALUMNOS-->
+                    <div class="row">
+                        <div class="row">
+                            <div class="col" style="text-align: left">
+                                <h5>Alumnos registrados</h5>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tablainscritos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Quitar del grupo</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellidos</th>
+                                        <th scope="col">Fecha inscripción</th>
+                                        <th scope="col">Anotaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for alumno in Alumnos%}
+                                    {% if alumno.activo%}
+                                    {% for rel in Rel%}
+                                    {% ifequal rel.id_alumno alumno.id%}
+                                    <tr>
+                                        <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                                                onclick="quitarAlumno('{{alumno.id}}','{{rel.id_grupo}}');"
+                                                data-url={{alumno.id}}>Quitar</a></td>
+                                        <td>{{alumno.nombre}}</td>
+                                        <td>{{alumno.apellido}}</td>
+                                        <td>{{alumno.fecha_inscripcion|stringformat:"s"}}</td>
+                                        <td>{{alumno.anotaciones}}</td>
+                                    </tr>
+                                    {% endifequal %}
+                                    {% endfor %}
+                                    {% endif %}
+                                    {% empty %}
+                                    <h2>No existe ningun alumno asignado a grupo</h2>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="row">
+                            <div class="col" style="text-align: left">
+                                <h5>Agregar alumno</h5>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" id="filtroalumno" placeholder="buscar incidencia">
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="tablanoinscritos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Agregar al grupo</th>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Apellidos</th>
+                                        <th scope="col">Fecha inscripción</th>
+                                        <th scope="col">Anotaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaAlumnos">
+                                    {% for alumno in Alumnos_f%}
+                                    {% if alumno.activo is True%}                        
+                                    <tr>
+                                        <td><a class="btn btn-secondary btn-sm agregar-alumno" style="color: white;"
+                                                onclick="agregarAlumno('{{alumno.id}}','{{GrupoF.id}}');"
+                                                data-url={{alumno.id}}>Agregar</a></td>
+                                        <td>{{alumno.nombre}}</td>
+                                        <td>{{alumno.apellido}}</td>
+                                        <td>{{alumno.fecha_inscripcion|stringformat:"s"}}</td>
+                                        <td>{{alumno.anotaciones}}</td>
+                                    </tr>
+                                    {% else%}
+                                    {% endif%}
+                                    {% empty %}
+                                    <h2>No existe ningun alumno disponible en este momento</h2>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                    <hr size="10" style="border:1px solid"/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" value={{GrupoF.id}} form="modificar_grupo" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarGrupos" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Desactivaras el grupo <b>"{{GrupoF.nombre}}"</b> , mientras permanezca desacactivado no podras
+                    editarlo ni utilizarlo para otras cosas, pero si para consultarlo en un futuro</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{GrupoF.id}} name="eliminar" class="btn btn-danger">Desactivar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- MODALES DE ALUMNOS-->
+<div class="modal fade " id="ModalConsultarAlumnos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de la informacion del
+                    alumno seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Nombre del alumno</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Apellidos del alumno</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.nombre}}"">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.apellido}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Correo electrónico</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de nacimiento</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de inscripcion</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="email" readonly class="form-control-plaintext" value="{{AlumnoF.correo}}">
+                    </div>
+                    <div class="col">
+                        <input type="date" readonly class="form-control-plaintext" value="{{AlumnoF.fecha_nacimiento}}">
+                    </div>
+                    <div class="col">
+                        <input type="date" readonly class="form-control-plaintext" value="{{AlumnoF.fecha_inscripcion}}">
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center; margin-top: 10px;">
+                    <div class="col">
+                        <h5>Número telefónico</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Dirección</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.telefono}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.direccion}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Ciudad</h5>
+                    </div>
+                    <div class="col">
+                        <h5>C.P.</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.ciudad}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.codigo_postal}}">
+                    </div>
+                </div>
+                <div class="form-row" style="margin-top: 10px;">
+                    <div class="col">
+                        <h5>Estado</h5>
+                    </div>
+                    <div class="col">
+                        <h5>País</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.estado}}">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.pais}}">
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="p-2">
+                            <h5>Promoción</h5>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <h5>Como se entero de nosotros</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <select class="form-control" disabled>
+                            <option selected>{{PromocionF.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select class="form-control" disabled>
+                            <option selected>{{AlumnoF.como_se_entero}}</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Anotaciones</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <textarea class="form-control" readonly style="resize: none;"
+                            rows="10">{{AlumnoF.anotaciones}}</textarea>
+                    </div>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Grupos a los que esta inscrito</h5>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive" style="overflow-y: scroll; height: 200px;">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Grupo</th>
+                                <th scope="col">Curso</th>
+                                <th scope="col">Horario</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rel in Rel%}
+                            {% for grupo in Grupos%}
+                            {% if grupo.activo%}
+                            <tr>
+                            {% ifequal grupo.id rel.id_grupo %}
+                            {% for curso in Cursos %}
+                            {% ifequal grupo.id_curso curso.id %}
+                            <td scope="col">{{grupo.nombre}}</td>
+                            <td scope="col">{{curso.nombre}}</td>
+                            <td scope="col">({{grupo.hora_inicio}}-{{grupo.hora_fin}})</td>
+                            {% endifequal %}
+                            {% endfor %}
+                            {% endifequal %}
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Adeudos de alumno</h5>
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive" style="overflow-y: scroll; height: 200px;">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Tipo adeudo</th>
+                                <th scope="col">Cantidad adeudada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarAlumnos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar Alumno</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_alumno" class="needs-validation">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre del alumno</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Apellidos del alumno</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mnombre"
+                                placeholder="Ingrese nombre(s) del alumno" value="{{AlumnoF.nombre}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mapellido"
+                                placeholder="Ingrese apellidos del alumno" value="{{AlumnoF.apellido}}" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Correo electrónico</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de nacimiento</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha de inscripcion</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="email" class="form-control" name="Mcorreo"
+                                placeholder="Ingrese correo electrónico" value="{{AlumnoF.correo}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="Mfecha_nac"
+                                placeholder="Ingrese fecha de nacimiento" value="{{AlumnoF.fecha_nacimiento}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control" name="Mfecha_ins"
+                                placeholder="Ingrese fecha de inscripcion" value="{{AlumnoF.fecha_inscripcion}}" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center; margin-top: 10px;">
+                        <div class="col">
+                            <h5>Número telefónico</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Dirección</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="tel" class="form-control" name="Mnumtel" minlength="10" maxlength="10"
+                                placeholder="Ingrese número telefónico" value="{{AlumnoF.telefono}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mdireccion" placeholder="Ingrese Dirección"
+                                value="{{AlumnoF.direccion}}" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Ciudad</h5>
+                        </div>
+                        <div class="col">
+                            <h5>C.P.</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mciudad" placeholder="Ingrese ciudad"
+                                value="{{AlumnoF.ciudad}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mcodigopostal"
+                                placeholder="Ingrese codigo postal" value="{{AlumnoF.codigo_postal}}" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Estado</h5>
+                        </div>
+                        <div class="col">
+                            <h5>País</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mestado" placeholder="Ingrese estado"
+                                value="{{AlumnoF.estado}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mpais" placeholder="Ingrese país"
+                                value="{{AlumnoF.pais}}" required>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="p-2">
+                                <h5>Promoción</h5>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <h5>Como se entero de nosotros</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <select class="form-control" name="Mpromo" required>
+                                <option disabled selected>Selecionar promocion</option>
+                                {% ifequal AlumnoF.id_promocion 0 %}
+                                <option value="0" selected>niguna promocion</option>
+                                {% for promocion in Promociones %}
+                                <option value={{promocion.id}} >{{promocion.nombre}}</option>
+                                {% endfor %}
+                                {% else %}
+                                <option value="0">niguna promocion</option>
+                                {% for promocion in Promociones %}
+                                <option value={{promocion.id}} {% ifequal promocion.id AlumnoF.id_promocion %} selected
+                                    {% endifequal %}>{{promocion.nombre}}</option>
+                                {% endfor %}    
+                                {% endifequal %}
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" name="Menterado" required>
+                                <option disabled selected>Selecionar opcion</option>
+                                <option value="redes" {% ifequal AlumnoF.como_se_entero redes %} selected
+                                    {% endifequal %}>Redes sociales</option>
+                                <option value="volantes" {% ifequal AlumnoF.como_se_entero volantes %} selected
+                                    {% endifequal %}>Volantes</option>
+                                <option value="carteles" {% ifequal AlumnoF.como_se_entero carteles %} selected
+                                    {% endifequal %}>Carteles publicitarios</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Anotaciones</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea class="form-control" style="resize: none;" name="Manotaciones"
+                                rows="10" required>{{AlumnoF.anotaciones}}</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{AlumnoF.id}} form="modificar_alumno" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarAlumnos" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Eliminaras el alumno <b>"{{AlumnoF.nombre}} {{AlumnoF.apellido}}"</b> con todos sus datos de forma
+                    permanente.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{AlumnoF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalWhatsAlumnos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Enviar What's a</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Nombre del alumno</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Apellidos del alumno</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.nombre}}"">
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control-plaintext" value="{{AlumnoF.apellido}}">
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center; margin-top: 10px;">
+                    <div class="col">
+                        <h5>Número telefónico</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <input type="text" class="form-control" id="Rtelefono" value="+521{{AlumnoF.telefono}}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Mensaje Personalizado</h5>
+                    </div>
+                </div>
+                <div class="form-row" style="align-items: center; justify-items: center;">
+                    <div class="col">
+                        <textarea class="form-control" id="Rmensaje"  style="resize: none;"
+                            rows="10"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="submit" onclick="enviarMsj();" data-dismiss="modal" class="btn btn-secondary">EnviarMensaje</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- SCRIPT ENVIO WHATS-->
+<script>
+ function enviarMsj(){
+    const telefono = document.getElementById('Rtelefono').value;
+    const mensaje = document.getElementById('Rmensaje').value;
+    window.open('https://api.whatsapp.com/send?phone='+telefono+'&text='+mensaje, '_blank');
+ }
+</script>
+<!-- MODALES DE PAGOS ALUMNOS-->
+<script>
+    //codigo para que renderise el pedo
+    jQuery(document).ready(function ($) {
+        $('.selectpicker').selectpicker({
+            style: 'btn-info',
+            size: 20
+        });
+        document.getElementById("Rcurso").disabled = true;
+        document.getElementById("Radeudo").disabled = true;
+        document.getElementById("Rtipopago").disabled = true;
+        document.getElementById("Rmetodopago").disabled = true;
+        document.getElementById("Rreferencia").disabled = true;
+        document.getElementById("Rpromocion").disabled = true;
+        document.getElementById("Rfechapago").disabled = true;
+        document.getElementById("Rfechaproximo").disabled = true;
+        document.getElementById("divadeudo").hidden = true;
+        document.getElementById("adeudocantidad").hidden = true;
+    });
+
+    function combos() {
+        var id_alumno = $('#alumnopicker').val();
+        document.getElementById("Rtipopago").disabled = false;
+        $.ajax({
+            url: "/registro/" + id_alumno,
+            type: "get",
+            success: function (data) {
+                $('#combos').html(data.rendered_table);
+                document.getElementById("Rcurso").disabled = true;
+                document.getElementById("Radeudo").disabled = true;
+                document.getElementById("total").innerHTML = "-";
+                resetTodo();
+            }
+        });
+    };
+
+    $('#alumnopicker').on('changed.bs.select', function () {
+        document.getElementById("Rid").value = $('#alumnopicker').val();
+        document.getElementById("Rnombre").value = $('#alumnopicker option:selected').text();
+    });
+
+    //Bloqueo de #Referencia en pago con efectivo
+    function bloquearReferencia() {
+        var m = document.getElementById("Rmetodopago").value;
+        document.getElementById("Rpromocion").disabled = false;
+        var r = document.getElementById("Rreferencia");
+        if (m === 'Efectivo') {
+            r.value = '-';
+            r.disabled = true;
+            document.getElementById("Rfechapago").disabled = true;
+        } else {
+            r.value = '';
+            r.disabled = false;
+            document.getElementById("Rfechapago").disabled = false;
+        }
+    };
+
+    function precioCurso() {
+        document.getElementById("preciocurso").innerHTML = document.getElementById("Rcurso").value;
+        document.getElementById("lblpreciocurso").innerHTML = "<h5>Curso: </h5>";
+        aplicartotal();
+
+    };
+
+    function resetTodo() {
+        document.getElementById("Rcurso").disabled = true;
+        document.getElementById("Radeudo").disabled = true;
+        document.getElementById("Rmetodopago").disabled = true;
+        document.getElementById("Rreferencia").disabled = true;
+        document.getElementById("Rpromocion").disabled = true;
+        document.getElementById("Rfechapago").disabled = true;
+        document.getElementById("Rfechaproximo").disabled = true;
+        document.getElementById("divadeudo").hidden = true;
+        document.getElementById("adeudocantidad").hidden = true;
+        document.getElementById("descuento").innerHTML = "-";
+        document.getElementById("preciocurso").innerHTML = "-";
+        document.getElementById("total").innerHTML = "-";
+        document.getElementById("precioinscripcion").innerHTML = "-";
+        document.getElementById("descuento").innerHTML = "-";
+        selectElement('Rtipopago', '-');
+    };
+
+    function cantidadAdeudo() {
+        var valor = document.getElementById("Radeudo").value;
+        var resultado = valor.split("-");
+        document.getElementById("preciocurso").innerHTML = resultado[0];
+        document.getElementById("lblpreciocurso").innerHTML = "<h5>Cantidad Adeudada: </h5>";
+        aplicartotal();
+    };
+
+    function aplicarPromo() {
+        document.getElementById("descuento").innerHTML = document.getElementById("Rpromocion").value + "%";
+        aplicartotal();
+    };
+
+    function aplicartotal() {
+        var c = parseFloat(document.getElementById("Rcurso").value);
+        var p = parseFloat(document.getElementById("Rpromocion").value);
+        var t = document.getElementById("Rtipopago").value;
+        var total = 0;
+        switch (t) {
+            case 'Inscripcion':
+                total = 500;
+                break;
+            case 'PagoCompleto':
+                total = 500;
+                break;
+            default:
+                total = 0;
+                document.getElementById("precioinscripcion").innerHTML = "-";
+                break;
+        }
+        if (document.getElementById("Radeudo").value == 0) {
+            if (p != NaN && c != NaN) {
+                total = total + c;
+                var descuento = (p * total) / 100;
+                document.getElementById("total").innerHTML = total - descuento;
+            } else if (c != NaN && p == NaN) {
+                total = total + c;
+                document.getElementById("total").innerHTML = total;
+                document.getElementById("descuento").innerHTML = "-";
+            } else if (c == NaN && p != NaN) {
+                var descuento = (p * total) / 100;
+                document.getElementById("total").innerHTML = total - descuento;
+            } else {
+                document.getElementById("total").innerHTML = total;
+                document.getElementById("descuento").innerHTML = "-";
+                document.getElementById("preciocurso").innerHTML = "-";
+            }
+        } else {
+            var valor = document.getElementById("Radeudo").value;
+            var resultado = valor.split("-");
+            document.getElementById("total").innerHTML = resultado[0];
+            document.getElementById("precioinscripcion").innerHTML = "-";
+            document.getElementById("descuento").innerHTML = "-";
+        }
+    };
+
+    function cambios() {
+        var t = document.getElementById("Rtipopago").value;
+        document.getElementById("Rmetodopago").disabled = false;
+        var c = document.getElementById("Rcurso");
+        var a = document.getElementById("Radeudo");
+        if (t === 'Inscripcion') {
+            c.disabled = true;
+            a.disabled = true;
+            selectElement('Rcurso', '0');
+            selectElement('Radeudo', '0');
+            document.getElementById("precioinscripcion").innerHTML = "500";
+            document.getElementById("preciocurso").innerHTML = "-";
+            document.getElementById("total").innerHTML = "-";
+        } else if (t === 'Abono') {
+            c.disabled = true;
+            a.disabled = false;
+            selectElement('Rcurso', '0');
+            selectElement('Radeudo', '0');
+            document.getElementById("Rpromocion").disabled = true;
+            selectElement('Rpromocion', '0');
+            document.getElementById("precioinscripcion").innerHTML = "-";
+            document.getElementById("preciocurso").innerHTML = "-";
+            document.getElementById("total").innerHTML = "-";
+        } else if (t === 'PagoCompleto') {
+            c.disabled = false;
+            a.disabled = true;
+            selectElement('Rcurso', '0');
+            selectElement('Radeudo', '0');
+            document.getElementById("precioinscripcion").innerHTML = "500";
+            document.getElementById("preciocurso").innerHTML = "-";
+            document.getElementById("total").innerHTML = "-";
+        } else {
+            c.disabled = false;
+            a.disabled = true;
+            document.getElementById("precioinscripcion").innerHTML = "-";
+            document.getElementById("preciocurso").innerHTML = "-";
+            document.getElementById("total").innerHTML = "-";
+            selectElement('Rcurso', '0');
+            selectElement('Radeudo', '0');
+            c.disabled = false;
+            a.disabled = true;
+        }
+    };
+
+    function selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
+    function abono() {
+        var t = parseFloat(document.getElementById("total").innerHTML);
+        var p = parseFloat(document.getElementById("Rcantidad").value);
+        if (t > p) {
+            document.getElementById("Rfechaproximo").disabled = false;
+            document.getElementById("divadeudo").hidden = false;
+            document.getElementById("lbladeudo").innerHTML = t - p;
+            document.getElementById("adeudocantidad").value = t - p;
+
+        } else {
+            document.getElementById("Rfechaproximo").disabled = true;
+            document.getElementById("Rfechaproximo").value = "";
+            document.getElementById("divadeudo").hidden = true;
+            document.getElementById("lbladeudo").innerHTML = "-";
+            document.getElementById("adeudocantidad").value = 0;
+        }
+    }
+</script>
+
+<div class="modal fade" id="ModalRegistrarPagos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nuevo pago</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="registrar_pago">
+                    {% csrf_token %}
+                    <div class="flex">
+                        <h3>Por favor ingrese toda la información del pago</h3>
+                        <hr />
+                        <div class="form-row" style="margin-top: 10px;">
+                            <div class="col">
+                                <h5>Buscar alumno</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <select class="selectpicker" data-width="auto" data-live-search="true" id="alumnopicker"
+                                    onchange="combos();" required>
+                                    <option data-tokens="" value="" selected disabled>Seleccione alumno a
+                                        registrar el pago</option>
+                                    {% for alumno in Alumnos%}
+                                    {% if alumno.activo%}
+                                    <option data-tokens="{{alumno.id}}" value="{{alumno.id}}">{{alumno.nombre}} {{alumno.apellido}}</option>
+                                    {% endif%}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+                        <hr />
+                        <h5>Informacion del pago</h5>
+                        <br />
+                        <div class="form-row" style="margin-top: 10px;">
+                            <div class="col-md-4" style="text-align: center;">
+                                <h5># Alumno</h5>
+                            </div>
+                            <div class="col-md-4" style="text-align: center;">
+                                <h5>Nombre</h5>
+                            </div>
+                            <div class="col-md-4" style="text-align: center;">
+                                <h5>Apellidos</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="number" readonly class="form-control-plaintext" id='Rid' name="Rid"
+                                    style="text-align: center;">
+                            </div>
+                            <div class="col">
+                                <input type="text" readonly class="form-control-plaintext" id='Rnombre'
+                                    style="text-align: center;">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="col">
+                                <select class="form-control" id="Rtipopago" name="Rtipopago" onchange="cambios();">
+                                    <option disabled selected value="-">Tipo de pago</option>
+                                    <option value="Inscripcion">Inscripcion</option>
+                                    <option value="Curso">Pago del curso</option>
+                                    <option value="PagoCompleto">Pago completo(modulo + inscripcion)</option>
+                                    <option value="Abono">Adeudo</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <select class="form-control" id="Rmetodopago" name="Rmetodopago"
+                                    onchange="bloquearReferencia();" required>
+                                    <option disabled selected value="">Metodo de pago</option>
+                                    <option value="Efectivo">Efectivo</option>
+                                    <option value="Deposito Banco">Deposito Banco</option>
+                                    <option value="Deposito OXXO">Deposito OXXO</option>
+                                    <option value="Transferencia">Tranferencia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="#referencia" id="Rreferencia"
+                                    name="Rreferencia">
+                            </div>
+                            <div class="col">
+                                <select class="form-control" id="Rpromocion" name="Rpromocion"
+                                    onchange="aplicarPromo()" required >
+                                    <option disabled selected value="">Seleccione promocion</option>
+                                    <option value="0">Ninguna promocion</option>
+                                    {% for promocion in Promociones %}
+                                    <option value={{promocion.porcentaje}}>{{promocion.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="d-flex flex-column" id="combos">
+                            <div class="p-2">
+                                <select class="form-control" id="Rcurso" name="Rcurso">
+                                    <option value="0" disabled selected>Seleccione curso a pagar</option>
+                                </select>
+                            </div>
+                            <div class="p-2">
+                                <select class="form-control" id="Radeudo" name="Radeudo">
+                                    <option value="0" disabled selected>Seleccione adeudo a pagar</option>
+                                </select>
+                            </div>
+                            <br />
+                        </div>
+                        <br />
+                        <div class="d-flex justify-content-around">
+                            <div class="col" style="text-align: center;">
+                                <h5>Fecha del pago</h5>
+                                <h6>(fecha marcada en el recibo)</h6>
+                            </div>
+                            <div class="col" style="text-align: center;">
+                                <h5>Fecha de proximo pago</h5>
+                                <h6>(solo si generara adeudo)</h6>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-around">
+                            <div class="col">
+                                <input type="date" class="form-control" id="Rfechapago" name="Rfechapago">
+                            </div>
+                            <div class="col">
+                                <input type="date" class="form-control" id="Rfechaproximo" name="Rfechaproximo">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-row">
+                            <div class="col" style="text-align:right;" id="lblpreciocurso">
+                                <h5>Curso:</h5>
+                            </div>
+                            <div class="col" id="preciocurso">
+                                <label>-</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col" style="text-align:right;">
+                                <h5>Inscripcion:</h5>
+                            </div>
+                            <div class="col" id="precioinscripcion">
+                                <label>-</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col" style="text-align:right;">
+                                <h5>Descuento:</h5>
+                            </div>
+                            <div class="col" id="descuento">
+                                <label>-</label>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col" style="text-align:right;">
+                                <h5>Total a pagar:</h5>
+                            </div>
+                            <div class="col" id="total">
+                                <label">-</label>
+                            </div>
+                        </div>
+                        <div class="form-row" id="divadeudo">
+                            <div class="col" style="text-align:right;">
+                                <h5>Adeudo:</h5>
+                                <input type="number" class="form-control" id="adeudocantidad" name="adeudocantidad">
+                            </div>
+                            <div class="col" id="lbladeudo">
+                                <label">-</label>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <input type="number" class="form-control" placeholder="Cantidad" id="Rcantidad"
+                                    onkeyup="abono()" name="Rcantidad" required>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" form="registrar_pago"
+                    name="registrarPago">Registrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalConsultarPagos" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de la informacion del
+                    pago seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex">
+                    <h5>Informacion del pago</h5>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5># Alumno</h5>
+                        </div>
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5>Nombre</h5>
+                        </div>
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5>Apellidos</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{Pago.id_registro}}>
+                        </div>
+                        <div class="col">
+                            {% for alumno in Alumnos%}
+                            {% ifequal alumno.id Pago.id_registro%}
+                            <input type="text" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{alumno.nombre}}>
+                            {% endifequal %}
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for alumno in Alumnos%}
+                            {% ifequal alumno.id Pago.id_registro%}
+                            <input type="text" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{alumno.apellido}}>
+                            {% endifequal %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Tipo de Pago</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Metodo de Pago</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <select class="form-control" disabled>
+                                <option disabled selected>{{Pago.tipo_pago}}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" disabled>
+                                <option disabled selected>{{Pago.metodo_pago}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Referencia</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Promocion %</h5>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" style="text-align: center;" readonly class="form-control-plaintext"
+                                value={{Pago.referencia}}>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" disabled>
+                                <option selected>{{Pago.promocion}}%</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="d-flex justify-content-around">
+                        <div class="col" style="text-align: center;">
+                            <h5>Fecha del pago</h5>
+                            <h6>(fecha marcada en el recibo)</h6>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Fecha de proximo pago</h5>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <div class="col">
+                            <input type="date" disabled class="form-control" style="text-align: center;"
+                                value={{Pago.fechaPago}}>
+                        </div>
+                        <div class="col">
+                            <input type="date" disabled class="form-control" style="text-align: center;"
+                                value={{Pago.fechaProxima}}>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Fecha de registro del pago</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col">
+                            <input type="date" style="text-align: center;" disabled class="form-control"
+                                value={{Pago.fechareg}}>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <br>
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Monto total pagado</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"></div>
+                        <div class="col" style="text-align:center;">
+                            <label>{{Pago.cantidad}}</label>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalConsultarPagosD" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de la informacion del
+                    pago seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex">
+                    <h5>Informacion del pago</h5>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5># Docente</h5>
+                        </div>
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5>Nombre</h5>
+                        </div>
+                        <div class="col-md-4" style="text-align: center;">
+                            <h5>Apellidos</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{PagoF.id_registro}}>
+                        </div>
+                        <div class="col">
+                            {% for docente in Docentes%}
+                            {% ifequal docente.id PagoF.id_registro%}
+                            <input type="text" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{docente.nombre}}>
+                            {% endifequal %}
+                            {% endfor %}
+                        </div>
+                        <div class="col">
+                            {% for docente in Docentes%}
+                            {% ifequal docente.id PagoF.id_registro%}
+                            <input type="text" readonly class="form-control-plaintext" style="text-align: center;"
+                                value={{docente.apellido}}>
+                            {% endifequal %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Tipo de Pago</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Metodo de Pago</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <select class="form-control" disabled>
+                                <option disabled selected>{{PagoF.tipo_pago}}</option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <select class="form-control" disabled>
+                                <option disabled selected>{{PagoF.metodo_pago}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col" style="text-align: center;">
+                            <h5>Referencia</h5>
+                        </div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Fecha del pago</h5>
+                            <h6>(fecha marcada en el recibo)</h6>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" style="text-align: center;" readonly class="form-control-plaintext"
+                            {%ifequal PagoF.referencia "" %} value="Pago realizado en efectivo." {% else %}value={{PagoF.referencia}} {% endifequal %}>
+                        </div>
+                        <div class="col">
+                            <input type="date" disabled class="form-control" style="text-align: center;" value={{PagoF.fechaPago}}>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Fecha de registro del pago</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col">
+                            <input type="date" style="text-align: center;" disabled class="form-control"
+                                value={{PagoF.fechareg}}>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <br>
+                    <div class="d-flex justify-content-around">
+                        <div class="col"></div>
+                        <div class="col" style="text-align: center;">
+                            <h5>Monto total pagado</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"></div>
+                        <div class="col" style="text-align:center;">
+                            <label>{{PagoF.cantidad}}</label>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODALES LIBROS-->
+<div class="modal fade " id="ModalConsultarLibros" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de informacion del
+                    libro seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex">
+                    <h5>Informacion del libro</h5>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Idioma del libro</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext" value="{{Libro_f.nombre}}">
+                        </div>
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext" value="{{Libro_f.idioma}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Nivel del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Precio del libro</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.nivel}}">
+                        </div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.precio}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Cantidad inicial</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Fecha inventario inicial</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.cantidad}}">
+                        </div>
+                        <div class="col">
+                            <input type="date" readonly class="form-control-plaintext" value="{{Libro_f.fechareg}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Cantidad ultimos agregados</h5>
+                        </div>                        
+                        <div class="col">
+                            <h5>Cantidad de libros en inv.</h5>
+                        </div>
+                        <div class="col">
+                            <h5>fecha ultimo inventariado</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.agregados}}">
+                        </div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.restantes}}">
+                        </div>
+                        <div class="col">
+                            <input type="date" readonly class="form-control-plaintext" value={{Libro_f.fecha_inv}}>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Total por libros en inv.</h5>
+                        </div>                        
+                        <div class="col">
+                            <h5>Total libros vendidos</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.total_en_venta}}" required>
+                        </div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.vendidos}}" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Anotaciones</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea class="form-control" style="resize: none;" readonly class="form-control-plaintext"
+                                rows="10" minlength="1">{{Libro_f.anotaciones}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarLibros" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar el libro seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="modificar_libro">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Idioma del libro</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" name="Mnombre" value="{{Libro_f.nombre}}"
+                                placeholder="Ingrese nombre del libro" required>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" name="Midioma" value="{{Libro_f.idioma}}"
+                                placeholder="Ingrese idioma del libro" required>
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Nivel del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Precio del libro</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" min="1" max="15" class="form-control" name="Mnivel" value="{{Libro_f.nivel}}"
+                                placeholder="Ingrese nivel del libro" required>
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" name="Mprecio" min="1" max="1000" value="{{Libro_f.precio}}"
+                                placeholder="Ingrese precio del libro" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Anotaciones</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea class="form-control" style="resize: none;" name="Manotaciones"
+                                rows="10" minlength="1" required>{{Libro_f.anotaciones}}</textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{Libro_f.id}} form="modificar_libro" name="modificar"
+                        class="btn btn-secondary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalAgregarLibros" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">agregar mas del libro seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="agregar_libro">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Idioma del libro</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext" value="{{Libro_f.nombre}}">
+                        </div>
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext" value="{{Libro_f.idioma}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col">
+                            <h5>Precio del libro</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Cantidad actual en inv.</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.precio}}">
+                        </div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Libro_f.restantes}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col"></div>
+                        <div class="col">
+                            <h5>Cantidad de libros a añadir</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <input type="number" class="form-control" name="Acantidad" min="1" max="100">
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" value={{Libro_f.id}} form="agregar_libro" name="agregar"
+                        class="btn btn-secondary">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL INVENTARIO/PRODUCTOS-->
+<div class="modal fade " id="ModalConsultarProductos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Consulta de informacion del
+                    producto seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex">
+                    <h5>Informacion del producto</h5>
+                    <br />
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Nombre del producto</h5>
+                        </div>
+                        <div class="col">
+                            <h5>Precio del producto</h5>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <input type="text" readonly class="form-control-plaintext" value="{{Producto_f.nombre}}">
+                        </div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Producto_f.precio}}">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top: 10px;">
+                        <div class="col"></div>
+                        <div class="col">
+                            <h5>Cantidad del producto</h5>
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <input type="number" readonly class="form-control-plaintext" value="{{Producto_f.inventario}}">
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <h5>Descripcion del producto</h5>
+                        </div>
+                    </div>
+                    <div class="form-row" style="align-items: center; justify-items: center;">
+                        <div class="col">
+                            <textarea readonly class="form-control-plaintext" style="resize: none;" rows="10">{{Producto_f.descripcion}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade " id="ModalModificarProductos" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modificar el producto seleccionado</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex">
+                    <h5>Informacion del producto</h5>
+                    <br />
+                    <form method="post" id="modificar_producto">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            <div class="col">
+                                <h5>Nombre del producto</h5>
+                            </div>
+                            <div class="col">
+                                <h5>Precio del producto</h5>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <input type="text" class="form-control" name="Mnombre" value="{{Producto_f.nombre}}"
+                                    placeholder="Ingrese nombre del producto" required>
+                            </div>
+                            <div class="col">
+                                <input type="number" min="1" max="1000" class="form-control" name="Mprecio" value="{{Producto_f.precio}}"
+                                    placeholder="Ingrese precio del producto" required>
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top: 10px;">
+                            <div class="col"></div>
+                            <div class="col">
+                                <h5>Cantidad del producto</h5>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <input type="number" min="1" step="any" max="100" class="form-control" name="Mcantidad" value="{{Producto_f.inventario}}"
+                                    placeholder="Ingrese nivel del libro" required>
+                            </div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <h5>Descripcion del producto</h5>
+                            </div>
+                        </div>
+                        <div class="form-row" style="align-items: center; justify-items: center;">
+                            <div class="col">
+                                <textarea class="form-control" style="resize: none;" name="Mdescripcion" rows="10" minlength="1" required>{{Producto_f.descripcion}}</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary"
+                        data-dismiss="modal">Cancelar</button>
+                    <button type="submit" form="modificar_producto" name="modificar" value="{{Producto_f.id}}"
+                        class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalEliminarProductos" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Eliminaras el producto <b>"{{Producto_f.nombre}}"</b> junto con todos sus datos de forma permanente.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{Producto_f.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Detalle de la venta -->
+<div class="modal fade " id="ModalDetalleVenta" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="mr-auto p-2">
+                    <h5><i class="fas fa-receipt"></i>&nbsp;Detalle de la  venta</h5>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <h5>Vendedor</h5>
+                    </div>
+                    <div class="col">
+                        <h5>Fecha de venta</h5>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <input type="text" readonly class="form-control" id="usuario" name="usuario" value={{Detalle_v2.usuarioreg}}>
+                    </div>
+                    <div class="col">
+                        <input type="text" readonly class="form-control" name="fechaVenta" id="fechaVenta" value={{Detalle_v2.fechaultmod}}>
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <div class="table-responsive" style="overflow-y: scroll; height: 300px;">
+                        <table class="table table-striped table-hover TablaVentas">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Tipo producto</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cantidad</th>
+                                    <th scope="col">Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody id="TProducto">
+                                {% for Detalle_v in Detalle_v %}
+                                <tr>
+                                    <td>{{Detalle_v.tipoProducto}}</td>
+                                    {% if Detalle_v.tipoProducto == 'Producto' %}
+                                        {% for P in Producto %}
+                                            {% if P.id == Detalle_v.id_producto %}
+                                                <td>{{P.nombre}}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for L in Libro %}
+                                            {% if L.id == Detalle_v.id_producto %}
+                                                <td>{{L.nombre}}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <td>{{Detalle_v.cantidad}}</td>
+                                    <td>$ {{Detalle_v.monto}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>    
+            <div class="modal-footer">
+                <div class="form-group">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="row">
+        <div class="col" style="text-align: left">
+            <h5>Aulas asignadas</h5>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tablaAsignadas">
+            <thead>
+                <tr>
+                    <th scope="col">Quitar del grupo</th>
+                    <th scope="col">Nombre aula</th>
+                    <th scope="col">Sillas</th>
+                    <th scope="col">Mesas</th>
+                    <th scope="col">Capacidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rel in RelA %}
+                {% for aula in Aulas %}
+                {% ifequal rel.id_aula aula.id %}
+                <tr>
+                    <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                        onclick="quitarAula('{{aula.id}}','{{GrupoF.pk}}');"
+                        data-url={{aula.id}}>Quitar</a></td>
+                    <td>{{aula.nombre_aula}}</td>
+                    <td>{{aula.cantidad_sillas}}</td>
+                    <td>{{aula.cantidad_mesas}}</td>
+                    <td>{{aula.capacidad}}</td>
+                </tr>
+                {% endifequal %}
+                {% endfor %}
+                {% empty %}
+                <h2>No existe ningun aula asignada a este grupo</h2>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="row">
+        <div class="col-md-6" style="text-align: left">
+            <h5>Aulas disponibles</h5>
+        </div>
+        <div class="col-md-6">
+            <input type="text" class="form-control" id="filtroaulas" placeholder="buscar incidencia">
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover" id="tablaNoAsignadas">
+            <thead>
+                <tr>
+                    <th scope="col">Asignar al grupo</th>
+                    <th scope="col">Nombre aula</th>
+                    <th scope="col">Sillas</th>
+                    <th scope="col">Mesas</th>
+                    <th scope="col">Capacidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aula in Aulas_f %}
+                {% if aula.activa %}
+                <tr>
+                    <td><a class="btn btn-secondary btn-sm quitar-alumno" style="color: white;"
+                        onclick="agregarAula('{{aula.id}}','{{GrupoF.pk}}');"
+                        data-url={{aula.id}}>Agregar</a></td>
+                    <td>{{aula.nombre_aula}}</td>
+                    <td>{{aula.cantidad_sillas}}</td>
+                    <td>{{aula.cantidad_mesas}}</td>
+                    <td>{{aula.capacidad}}</td>
+                </tr>
+                {% endif %}
+                {% empty %}
+                <h2>No existe ningun aula disponible en este momento</h2>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>

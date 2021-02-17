@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card " style="width: 95%; height: 95%;">
+    <div class="card-body">
+        <h5 class="card-title" style="text-align: center; font-size: 30px; margin-top: 5px;">
+            Registro de pagos a docentes</h5>
+        <div class="row">
+            <div class="col" style="text-align: center;">
+                <h5>Buscar pago</h5>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+                <div class="col" style="text-align: center;">
+                    <input type="text" class="form-control" id="filtronombre" placeholder="Buscar incidencia">
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true"
+                    title="Puedes buscar por cualquier insidencia en la tabla Ej. Docente, Tipo de pago, Metodo etc...">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                        class="bi bi-info-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                        <path
+                            d="M8.93 6.588l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="col-md-3"></div>
+            
+        </div>
+        <div class="row" style="margin-left: 3px;  margin-top: 10px;">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" style="margin-left: auto;margin-right: auto;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Docente</th>
+                            <th scope="col">Tipo de pago</th>
+                            <th scope="col">Metodo de pago</th>
+                            <th scope="col">Monto</th>
+                            <th scope="col">fecha registro pago</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablapago">
+                        {% for pago in Pagos%}
+                        {% for docente in Docentes%}
+                        {% ifequal docente.id pago.id_registro %}
+                        <tr>
+                            <td><a class="btn btn-secondary btn-sm modal-consulta" style="color: white;"
+                                    data-url={{pago.id}}>consultar</a></td>
+                            <td>{{docente.nombre}} {{docente.apellido}}</td>
+                            <td>{{pago.tipo_pago}}</td>
+                            <td>{{pago.metodo_pago}}</td>
+                            <td>{{pago.cantidad}}</td>
+                            <td>{{pago.fechareg}}</td>
+                        </tr>
+                        {% endifequal%}
+                        {% endfor %}
+                        {% empty%}
+                        <h2>No existe ningun pago de docente,registre uno nuevo!</h2>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row align-items-end">
+                <div class="col">
+                </div>
+                <div class="col"></div>
+                <div class="col">
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal"
+                        style="margin-top:20%; margin-left:50%;">
+                        Registrar Pago
+                    </button>
+
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo pago</h5>
+                                    <a tabindex="0" class="btn btn-outline-dark" role="button" data-toggle="popover"
+                                        data-trigger="focus" title="Ayuda"
+                                        data-content="al llenar filtros(no todos son necesarios), el campo de alumno de informacion de pago, se llenara con el nombre de un alumno, para ver a que alumno se le asigna el pago">?</a>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="post" id="registrar_pago">
+                                        {% csrf_token %}
+                                        <div class="flex">
+                                            <h3>Por favor ingrese toda la información del pago</h3>
+                                            <hr />
+                                            <div class="form-row" style="margin-top: 10px;">
+                                                <div class="col">
+                                                    <h5>Buscar alumno</h5>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col">
+                                                    <select class="selectpicker" data-width="auto"
+                                                        data-live-search="true" id="docentepicker" required>
+                                                        <option selected disabled value="">
+                                                            Seleccione docente a registrar el pago</option>
+                                                        {% for docente in Docentes%}
+                                                        <option data-tokens="{{docente.id}}" value="{{docente.id}}">
+                                                            {{docente.nombre}} {{docente.apellido}}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <hr />
+                                            <h5>Informacion del pago</h5>
+                                            <br />
+                                            <div class="form-row" style="margin-top: 10px;">
+                                                <div class="col-md-4" style="text-align: center;">
+                                                    <h5># Docente</h5>
+                                                </div>
+                                                <div class="col-md-4" style="text-align: center;">
+                                                    <h5>Nombre</h5>
+                                                </div>
+                                                <div class="col-md-4" style="text-align: center;">
+                                                    <h5>Apellidos</h5>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="col">
+                                                    <input type="number" readonly class="form-control-plaintext"
+                                                        id='Rid' name="Rid" style="text-align: center;">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" readonly class="form-control-plaintext"
+                                                        id='Rnombre' style="text-align: center;">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col" style="text-align: center;">
+                                                    <h5>Tipo de pago</h5>
+                                                </div>
+                                                <div class="col" style="text-align: center;">
+                                                    <h5>Metodo de pago</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col">
+                                                    <select class="form-control" id="Rtipopago" name="Rtipopago">
+                                                        <option disabled selected value="-">Tipo de pago</option>
+                                                        <option value="pagoHora">Pago por Hora</option>
+                                                        <option value="quincenal">Quincenal</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <select class="form-control" id="Rmetodopago" name="Rmetodopago"
+                                                        onchange="bloquearReferencia()">
+                                                        <option disabled selected value="-">Metodo de pago</option>
+                                                        <option value="Efectivo">Efectivo</option>
+                                                        <option value="Deposito Banco">Deposito Banco</option>
+                                                        <option value="Deposito OXXO">Deposito OXXO</option>
+                                                        <option value="Transferencia">Tranferencia</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col" style="text-align: center;">
+                                                    <h5>No. referencia</h5>
+                                                </div>
+                                                <div class="col" style="text-align: center;">
+                                                    <h5>Fecha del pago</h5>
+                                                    <h6>(fecha marcada en el recibo)</h6>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col">
+                                                    <input type="text" class="form-control" placeholder="#referencia"
+                                                        id="Rreferencia" name="Rreferencia">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="date" class="form-control" id="RfechaRegistro"
+                                                        name="RfechaRegistro">
+                                                </div>
+                                            </div>
+                                            <br />
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col" style="text-align: center;">
+                                                    <h5>Monto total pagado:</h5>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-around">
+                                                <div class="col"></div>
+                                                <div class="col">
+                                                    <input type="number" class="form-control" id="Rcantidad"
+                                                        name="Rcantidad" placeholder="Cantidad" required>
+                                                </div>
+                                                <div class="col"></div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" form="registrar_pago"
+                                        name="registrarPago">Registrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modal-div">
+</div>
+<script>
+    $('#docentepicker').on('changed.bs.select', function () {
+        document.getElementById("Rid").value = $('#docentepicker').val();
+        document.getElementById("Rnombre").value = $('#docentepicker option:selected').text();
+    });
+
+    function bloquearReferencia() {
+        var m = document.getElementById("Rmetodopago").value;
+        var r = document.getElementById("Rreferencia");
+        if (m === 'Efectivo') {
+            r.value = '-';
+            r.disabled = true;
+            document.getElementById("RfechaRegistro").value = "";
+            document.getElementById("RfechaRegistro").disabled = true;
+        } else {
+            r.value = '';
+            r.disabled = false;
+            document.getElementById("RfechaRegistro").value = "";
+            document.getElementById("RfechaRegistro").disabled = false;
+        }
+    };
+
+    function selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+    var modalDiv = $("#modal-div");
+    $(".modal-consulta").on("click", function () {
+        $.ajax({
+            url: $(this).attr("data-url"),
+            success: function (data) {
+                modalDiv.html(data);
+                $("#ModalConsultarPagosD").modal();
+            }
+        });
+    });
+    $(document).ready(function () {
+        $("#filtronombre").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#tablapago tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+{% endblock %}
