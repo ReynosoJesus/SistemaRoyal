@@ -107,7 +107,7 @@ WSGI_APPLICATION = 'sistemaGestionRoyal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'royalLanguage',
+        'NAME': 'royallanguage',
         'USER': 'dbadmin',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
