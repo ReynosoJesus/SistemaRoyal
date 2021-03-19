@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .utils import render_to_pdf
 from datetime import date
+from datetime import datetime
 from rest_framework.parsers import JSONParser
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -37,12 +38,27 @@ def alumno_list(request):
         serializer_class = AlumnoSerializer(Alumnos, many=True)
         return JsonResponse(serializer_class.data, safe=False)
     elif request.method == 'PUT':
+        print('entra aqui')
         data = JSONParser().parse(request)
         idAlumno = data.get("id")
         contrasena = data.get("password")
-        print(idAlumno, contrasena)
+        nombre = data.get("nombre")
         if contrasena is not None:
             Alumno.objects.filter(pk=idAlumno).update(primerinicio=False, contrasena=contrasena,
+                                                      fechaultmod=datetime.datetime.now(), usuarioultmod="modificado por el usuario en la app")
+            return JsonResponse(data, status=status.HTTP_200_OK)
+        if nombre is not None:
+            apellido = data.get("apellido")
+            fecha_nac = data.get("fecha_nac")
+            calle = data.get("calle")
+            codigo_postal = data.get("cp")
+            ciudad = data.get("ciudad")
+            estado = data.get("estado")
+            pais = data.get("pais")
+            num_tel = data.get("num_tel")
+            date_time_obj = datetime.datetime.strptime(fecha_nac, '%d/%m/%Y')
+            date_time_obj = date_time_obj.strftime("%Y-%m-%d")
+            Alumno.objects.filter(pk=idAlumno).update(nombre=nombre, apellido=apellido, fecha_nacimiento=date_time_obj, codigo_postal=codigo_postal, direccion=calle, ciudad=ciudad, estado=estado, pais=pais, telefono=num_tel,
                                                       fechaultmod=datetime.datetime.now(), usuarioultmod="modificado por el usuario en la app")
             return JsonResponse(data, status=status.HTTP_200_OK)
         return JsonResponse(status=status.HTTP_400_BAD_REQUEST)
@@ -98,7 +114,7 @@ def grupos_detail(request, pk):
 
 
 @api_view(['GET'])
-def certificados_list(request,pk):
+def certificados_list(request, pk):
     if request.method == 'GET':
         response = list()
         if pk is not None:
@@ -107,7 +123,7 @@ def certificados_list(request,pk):
             cursos = Curso.objects.all()
             for x in certificados:
                 for y in grupos:
-                    if x.id_grupo==y.pk:
+                    if x.id_grupo == y.pk:
                         for z in cursos:
                             if y.id_curso == z.pk:
                                 certificado = {
@@ -116,10 +132,11 @@ def certificados_list(request,pk):
                                     "curso": str(z.nombre),
                                     "nivel": str(z.nivel),
                                     "archivo": str(x.archivo),
-                                    }
+                                }
                                 response.append(certificado)
             jsonString = json.dumps(response)
             return HttpResponse(jsonString, content_type='application/javascript; charset=utf8')
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def libros_detail(request):
@@ -266,8 +283,9 @@ def royalAppPassword(request):
     if 'reset' in request.POST:
         idreset = request.POST['reset']
         usuario = request.user.username
-        print(Alumno.objects.get(pk=idreset).contrasena) 
-        Alumno.objects.filter(pk=idreset).update(contrasena="12345",fechaultmod=datetime.datetime.now(), usuarioultmod=usuario)
+        print(Alumno.objects.get(pk=idreset).contrasena)
+        Alumno.objects.filter(pk=idreset).update(
+            contrasena="12345", fechaultmod=datetime.datetime.now(), usuarioultmod=usuario)
         return HttpResponseRedirect("/royalApp/")
     return render(request, 'passwords.html', Context)
 
@@ -371,19 +389,20 @@ def certificados(request):
     Grupos = Grupo.objects.all()
     Context = {
         'Alumnos': Alumnos,
-        'Certificados':Certificados,
-        'Grupos':Grupos
+        'Certificados': Certificados,
+        'Grupos': Grupos
     }
     if request.method == 'POST':
-        if 'registrar' in request.POST:    
+        if 'registrar' in request.POST:
             id_alumno = request.POST['alumnopicker']
             id_grupo = request.POST['Rgrupo']
             file = request.FILES['Rcertificado']
             usuario = request.user.username
             nuevo_certificado = Certificado(usuarioreg=usuario, usuarioultmod=usuario, fechareg=datetime.datetime.now(),
-                fechaultmod=datetime.datetime.now(), id_alumno=id_alumno,id_grupo=id_grupo)
+                                            fechaultmod=datetime.datetime.now(), id_alumno=id_alumno, id_grupo=id_grupo)
             nuevo_certificado.save()
-            nuevo_certificado.archivo.save('certificado-'+id_alumno+'-'+id_grupo+'.pdf',file,save=True)
+            nuevo_certificado.archivo.save(
+                'certificado-'+id_alumno+'-'+id_grupo+'.pdf', file, save=True)
             return HttpResponseRedirect("/certificados/")
         if 'eliminar' in request.POST:
             iddel = request.POST['eliminar']
@@ -393,17 +412,19 @@ def certificados(request):
             return HttpResponseRedirect("/certificados/")
     return render(request, 'certificados.html', Context)
 
-def modalcertificados(request,id=None):
+
+def modalcertificados(request, id=None):
     if id is not None:
         Certificado_f = Certificado.objects.get(pk=id)
         Alumno_f = Alumno.objects.get(pk=Certificado_f.id_alumno)
         Grupo_f = Grupo.objects.get(pk=Certificado_f.id_grupo)
         context = {
             'Certificado_f': Certificado_f,
-            'Alumno_f':Alumno_f,
-            'Grupo_f':Grupo_f
+            'Alumno_f': Alumno_f,
+            'Grupo_f': Grupo_f
         }
         return render(request, 'modales.html', context)
+
 
 def modalcertificadoscombos(request, id_alumno=None):
     # solo para consulta dinamica de los cursos de cada alumno

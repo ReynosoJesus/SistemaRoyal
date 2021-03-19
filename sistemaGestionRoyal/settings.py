@@ -28,7 +28,7 @@ SECRET_KEY = '%(6b)2z@y&5a%+#(7eawt===ai^gyuui3wg0o7nhtn62gquadz'
 #EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 #DEBUG = True
 #ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1','localhost','sistemag.herokuapp.com']
 ALLOWED_HOSTS = ['*']
@@ -107,16 +107,17 @@ WSGI_APPLICATION = 'sistemaGestionRoyal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'royallanguage',
-        'USER': 'dbadmin',
+        'NAME': 'royalLanguage',
+        'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
-        'PORT': ''
+        'PORT': '5432'
     }
 }
 
+#name en debug/local royalLanguage, en produccion royallanguage
 #usuario produccion dbadmin, usuario debug/local ->postgres
-# port debug/local > 5432
+# port debug/local > 5432, produccion dejar vacio
 db_from_env = dj_database_url.config(conn_max_age=600)
 DATABASES['default'].update(db_from_env)
 
