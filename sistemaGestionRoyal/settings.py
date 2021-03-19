@@ -17,7 +17,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 #BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
+STRIPE_SECRET_KEY = 'sk_test_51IRQNEIIAMfdyG2GG5EMHIrAiEW2Ag2lmqNWC93Q1TlnAq49L2Rva5vAFDcxaL0FhArePxczQWNnPCGRbddKHWEA00AFC0gw74'
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,10 +28,10 @@ SECRET_KEY = '%(6b)2z@y&5a%+#(7eawt===ai^gyuui3wg0o7nhtn62gquadz'
 #EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1','localhost','sistemag.herokuapp.com']
-
+#DEBUG = False
+DEBUG = True
+#ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1','localhost','sistemag.herokuapp.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -44,10 +44,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'whitenoise.runserver_nostatic',
+    'corsheaders',                              # para hacer las apis este y el rest
+    'rest_framework',                           # add this
     'bootstrap4'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',    #  para hacer las apis
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -59,6 +62,25 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'sistemaGestionRoyal.urls'
+
+# # Whitelist localhost:3000 because that's where frontend will be served
+
+# Option 1
+#CORS_ORIGIN_WHITELIST = [
+#    'https://localhost:3000',
+#]
+
+# Option 2 demos este para que todos hagan las peticiones
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
 
 TEMPLATES = [
     {

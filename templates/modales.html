@@ -86,28 +86,27 @@
                     <img src="../static/img/cancel.png" alt="Responsive image">
                     <h4 class="modal-title w-100">¿Estas seguro?</h4>
                 </div>
-
             </div>
             <div class="modal-body" style="text-align: center;">
-                {% if CursoF.activo %}
-                <p>No puedes eliminar un curso que este en un(os) grupo(s), por favor elimina el grupo o cambia de curso
-                </p>
-                {% else %}
+                {% if not Grupos %}
                 <p>Eliminaras el curso <b>"{{CursoF.nombre}} - {{CursoF.nivel}}"</b> con todos sus datos de forma
                     permanente.</p>
                 <p>¿Deseas continuar?</p>
-                {% endif %}
+                {% else %}
+                <p>No puedes eliminar un curso que este en un(os) grupo(s), por favor elimina el grupo o cambia de curso
+                </p>
+                {%  endif %}
             </div>
             <div class="modal-footer justify-content-center">
-                {% if CursoF.activo %}
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                {% else %}
+                {% if not Grupos %}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" value={{CursoF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
                 </form>
-                {% endif %}
+                {% else %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                {%  endif %}
             </div>
         </div>
     </div>
@@ -313,7 +312,7 @@
                     <div class="form-row" style="align-items: center; justify-items: center;">
                         <div class="col">
                             <textarea class="form-control" style="resize: none;" name="Manotaciones"
-                                rows="5" required></textarea>
+                                rows="5" required>{{AulaF.anotaciones}}</textarea>
                         </div>
                     </div>
                 </form>
@@ -339,15 +338,25 @@
                 </div>
             </div>
             <div class="modal-body" style="text-align: center;">
+                {% if not Rel %}
                 <p>Eliminaras el aula <b>"{{AulaF.nombre_aula}}"</b> junto con todos sus datos de forma permanente.</p>
                 <p>¿Deseas continuar?</p>
+                {% else %}
+                <p>No puedes eliminar una aula que este asignada en un(os) grupo(s), por favor elimina el grupo(s) asignados o desasigna el aula de todos los grupos
+                </p>
+                {% endif %}
             </div>
             <div class="modal-footer justify-content-center">
+                {% if not Rel %}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <form method="post">
                     {% csrf_token %}
                     <button type="submit" value={{AulaF.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
                 </form>
+                {% else %}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                {% endif %}
+                
             </div>
         </div>
     </div>
@@ -1906,6 +1915,31 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="ModalResetPassword" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/question-mark.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Volveras a poner la contraseña del alumno<b>"{{AlumnoF.nombre}} {{AlumnoF.apellido}}"</b> a la contraseña default.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{AlumnoF.id}} name="reset" class="btn btn-danger">Reset</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- SCRIPT ENVIO WHATS-->
 <script>
  function enviarMsj(){
@@ -3070,6 +3104,32 @@
                 <div class="form-group">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal Certificado-->
+
+<div class="modal fade" id="ModalEliminarCertificado" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-confirm">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <div class="icon-box" style=" margin: auto; text-align: center;">
+                    <img src="../static/img/cancel.png" alt="Responsive image">
+                    <h4 class="modal-title w-100">¿Estas seguro?</h4>
+                </div>
+            </div>
+            <div class="modal-body" style="text-align: center;">
+                <p>Eliminaras el certificado de <b>{{Alumno_f.nombre}} {{Alumno_f.apellido}}</b> del grupo <b>{{Grupo_f.nombre}}</b> de manera forma permanente.</p>
+                <p>¿Deseas continuar?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" value={{Certificado_f.id}} name="eliminar" class="btn btn-danger">Eliminar</button>
+                </form>
             </div>
         </div>
     </div>

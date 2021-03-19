@@ -7,15 +7,15 @@
         value="{{Alumno_f.apellido}}" required>
 </div>
 <div class="col-md-4">
-    <select class="selectpicker" data-width="auto" data-live-search="true" name="Rcurso" title="Seleccione grupo"
-        style="text-align: center;" id="Rcurso" required>
+    <select class="selectpicker" data-width="auto" data-live-search="true" name="Rgrupo" title="Seleccione grupo"
+        style="text-align: center;" id="Rgrupo" required>
         {% for rel in Rel%}
         {% for grupo in Grupos%}
         {% if grupo.activo %}
         {% ifequal grupo.id rel.id_grupo %}
         {% for curso in Cursos %}
         {% ifequal grupo.id_curso curso.id %}
-        <option value={{curso.nombre}}-{{curso.nivel}}>{{grupo.nombre}} - {{curso.nombre}} -
+        <option value={{grupo.id}}>{{grupo.nombre}} - {{curso.nombre}} -
             nivel {{curso.nivel}} - ({{grupo.hora_inicio}}-{{grupo.hora_fin}})</option>
         {% endifequal %}
         {% endfor %}

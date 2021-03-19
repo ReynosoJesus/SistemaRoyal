@@ -17,8 +17,8 @@ class Alumno(models.Model):
     id_promocion = models.IntegerField()
     como_se_entero = models.CharField(max_length=200)
     anotaciones = models.CharField(max_length=500)
-    #contrasena = models.CharField(max_length=40,default='12345')
-    #primerinicio = models.BooleanField(default=True)
+    contrasena = models.CharField(default='12345',max_length=40)
+    primerinicio = models.BooleanField(default=True)
     activo = models.BooleanField(default=True)
     usuarioreg = models.CharField(max_length=200)
     usuarioultmod = models.CharField(max_length=200)
@@ -46,9 +46,9 @@ class Docente(models.Model):
     fechaultmod = models.DateField(auto_now=True)
 
 class Certificado(models.Model):
-    id_curso = models.IntegerField()
+    id_grupo = models.IntegerField()
     id_alumno = models.IntegerField()
-    imagen = models.CharField(max_length=500)
+    archivo = models.FileField(null=True,blank=True,upload_to="certificados")
     usuarioreg = models.CharField(max_length=200)
     usuarioultmod = models.CharField(max_length=200)
     fechareg = models.DateField()

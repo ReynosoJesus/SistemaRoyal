@@ -15,19 +15,30 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import url, include 
+from rest_framework import routers                      # add this
 from sistema import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+#router = routers.DefaultRouter()                        # add this
+#router.register(r'Alumnos', views.AlumnoSerializer, 'Alumnos')   
 
 urlpatterns = [
+    url(r'^', include('sistema.urls')),#las apis
     path('admin/', admin.site.urls),
     path('', views.inicio, name='inicio'),
     path('logout', views.logoutUser, name='logout'),
     path('home/', views.base, name='home'),
     path('consulta_a/', views.consultar_a, name='consultar_a'),
+    path('royalApp/', views.royalAppPassword, name='royalApp'),
+    path('royalApp/<int:alumno>', views.modalAlumnos, name='royalApp'),
     path('consulta_a/<int:alumno>', views.modalAlumnos),
     path('consulta_d/', views.consultar_d, name='consultar_d'),
     path('consulta_d/<int:id>', views.modalDocentes),
     path('certificados/', views.certificados, name='certificados'),
-    path('certificados/<int:id_alumno>/', views.modalcertificados),
+    path('certificados/<int:id_alumno>/', views.modalcertificadoscombos),
+    path('certificados/eliminar/<int:id>', views.modalcertificados),
     path('curso/', views.curso, name='cursos'),
     path('curso/<int:id>/', views.modalCursos),
     path('aula/', views.aula, name='aula'),
@@ -52,5 +63,9 @@ urlpatterns = [
     path('caja/', views.caja, name='caja'),
     path('cajacierre/', views.cajacierre, name='cajacierre'),
     path('historialVentas/', views.historialVentas, name='historialVentas'),
-    path('caja/<int:id>/', views.modalDetalleVenta),
+    path('caja/<int:id>/', views.modalDetalleVenta)
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)
