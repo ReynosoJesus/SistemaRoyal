@@ -28,8 +28,8 @@ SECRET_KEY = '%(6b)2z@y&5a%+#(7eawt===ai^gyuui3wg0o7nhtn62gquadz'
 #EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-DEBUG = True
+DEBUG = False
+#DEBUG = True
 #ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1','localhost','sistemag.herokuapp.com']
 ALLOWED_HOSTS = ['*']
 
